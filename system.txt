@@ -750,7 +750,7 @@ windows
 					git add README.md
 					git commit -m "first commit"
 					git branch -M main
-					git remote add origin git@github.com:tian-home/test01.git
+					git remote add origin git@github.com:tian-home/test.git
 					git push -u origin main
 				... …or push an existing repository from the command line
 					git remote add origin git@github.com:tian-home/test01.git
@@ -767,6 +767,13 @@ windows
 
 				重新添加
 					$ git remote add origin git@github.com:tian-home/memo.git
+
+				重命名文件
+					$ git mv abc.txt abc01.txt
+
+				删除文件
+					
+
 
 
 			https(不推荐)
@@ -939,6 +946,12 @@ windows
 		    Author: tianyunchuan <tianyunchuan@gmail.com>
 		    Date:   Thu Sep 10 23:06:40 2020 +0800
 
+		$ git log --oneline
+
+		$ git log --oneline --graph
+
+
+
 		$ git log --author='tian-home'
 
 
@@ -959,6 +972,17 @@ windows
 		        create file first.txt
 
 		     create mode 100644 first.txt
+
+
+		#### 建立标签
+		$ git tag v1.0  (建立在最新一次的 git commit 之上)
+			git log查看 commit 05939a136e8d0647e0ed74e820cff346c1b49799 (HEAD -> main, tag: v1.0)
+		#### 删除标签
+		$ git tag -d v1.0
+		#### 推送新版本到远程仓库
+		$ git push origin v1.0
+
+
 
 
 
@@ -1007,6 +1031,58 @@ windows
 		3.0 把公钥复制到github上面，添加即可
 			例：
 			ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQD58JPGEetmFNbCaaciWCdh/AAZxhnp68elV9iYAe8TGoPPrw5riniNCkmmJ8E6Y8R8M0luX/GhxgWpg0R+r4/x2DbdOKv5bif8FD7Mb/TdacqSnr2U1MK7GlunhqwHKcMWjPMSqNeB3xoNwFX1VGojZc6iuNnOl1RgRM0GpVQqROgt26OsnTp9RW+UkNYwePtBmX5AULSjGGky0DyRF1GfYZHrlmjr/KWEl6mGV7/TX3MQ15vSECGn2F4sVnLplpH+fzXiGVy41nhzvWMZXYaXiBeKxDyY3aw8xb8tRgtITJP5tzHnUBRwnuj5KH+noCjLi1V4OH1RgYkYZcejPsKG8bsZPf4FvffRiapc8= tian-home@outlook.com
+
+
+	【不同人修改一个文件】
+		01. tian-home push 
+		02. github 上创建新的分支 yunchuan
+
+		03. 克隆github文件 
+			$ git clone git@github.com:tian-home/test.git yunchuanfile
+		04. 切换git用户
+			$ git config --add --local user.name 'tian-yunchuan'
+			$ git config --add --local user.email 'tian-yunchuan@outlook.com'
+			# 查看用户切换
+			git config --add --local user.email 'tian-yunchuan@outlook.com'
+		05. 查看本地分支与远程分支的关系
+			$ git branch -av
+		06. 切换到 yunchuan 分支上去，并且和远端已做关联
+			$ git checkout -b yunchuan remotes/origin/yunchuan
+
+		07. 由tian-yunchuan账号、文件夹修改代码
+			$ echo "这是yunchuan修改的代码" >> abc.txt
+			# 查看 
+				$ git status
+				$ git add .
+				$ git commit -m 'yunchuan修改的代码'
+				$ git push
+		08. github上查看yunchuan分支代码是否被修改
+		09. 切换回 _git_test 文件夹，查看文件， 查看分支
+			$ git branch -av
+		10. 拿到最新更新的分支, 并查看（发现已更新yunchuan分支）
+			$ git fetch
+			$ git branch -av
+		11. 切换到 yunchuan分支，并修改代码，查看status
+			$ git checkout -b yunchuan remotes/origin/yunchuan
+			$ echo "这是tian-home修改的代码" >> abc.txt					
+		12. git 查看，添加，提交，推送
+			$ git status
+			$ git add .
+			$ git commit -m '这是tian-home修改的代码'
+			$ git push
+		13. 刷新github远程仓库
+			"""
+				# memo
+				这是yunchuan修改的代码
+				这是tian-home修改的代码
+			"""
+			大功告成！
+
+
+
+
+
+
 
 
 
@@ -1105,11 +1181,36 @@ windows
 
 
 	【分支 Branch】
+		创建分支
+			$ git branch proc01
+			
 
-	$ git branch proc01
-	$ git checkout proc01
+		查看分支
+			$ git branch
+				"""
+				* main
+				  proc01
+				  test
+				"""
+		转移到某个分支
+			$ git checkout proc01    ->	Switched to branch 'proc01'
 
-	Switched to branch 'proc01'
+		删除分支
+			$ git branch -d test    （不能是当前所在分支、当前有commit人物也不能删除）
+			$ git branch -D test    （强制删除）
+
+		创建并切换到新的分支
+			$ git checkout -b test
+
+		合并分支
+			$ git merge proc01
+			$ git merge --abort  (发生冲突时保证main代码)
+			$ git merge origin/proc01s   (不同人修改了不同的文件，怎么提交)
+
+
+
+
+	
 
 	tianyunchuan@SHLT73-R90JMHZF MINGW64 ~/iCloudDrive/github/data-analysis (proc01)
 
