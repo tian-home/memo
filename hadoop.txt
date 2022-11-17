@@ -1,0 +1,1939 @@
+[hoodop]..
+			0) Linux 常用命令
+				1. 软件操作
+					- 安装软件：yum install ***
+					- 卸载软件：yum remove ***
+					- 搜索软件：yum search ***
+					- 清理缓存：yum clean packages
+					- 列出已安装：yum list
+						-[ti@localhost ~]$ yum list |grep firewalld
+					- 软件包信息：yum info vim-common
+
+				2. 硬件资源信息
+					- 内存： free -m
+					- 硬盘： df -h
+					- 负载： w （最近1,5,15分钟负载）
+					- 负载： top
+					- cpu：cat /proc/cpuinfo
+
+				3. 文件目录
+					- 根目录： /
+					- 家目录： /home
+					- 临时目录： /tmp
+					- 配置目录： /etc
+					- 用户程序目录： /usr
+
+				4. 文件操作基本命令
+					- 查看目录下文件： ls
+						- ll = ls -al
+					- 新建文件： touch filename
+						- touch imooc
+						- touch imooc.log
+					- 新建文件夹： mkdir
+						- mkdir -p imooc/t1/t2/t3
+					- 删除文件和目录： rm (rm -rf filename)
+					- 复制： cp
+						- [root@localhost tmp]# cp ./imooc.log /tian
+					- 移动： mv
+						- [root@localhost tian]# mv /tian/imooc.log /tmp
+					- 显示路径： pwd
+
+				5. vim
+					- http://www.runoob.com/linux/linux-vim.html
+					- 显示行数： :set number
+					- G → 移动到这个档案的最后一行(常用)
+					- gg →  移动到这个档案的第一行，相当于 1G 啊！ (常用)
+					- /word →  	向光标之下寻找一个名称为 word 的字符串。例如要在档案内搜寻 vbird 这个字符串，就输入 /vbird 即可！ (常用)
+					- ?word →  	向光标之上寻找一个字符串名称为 word 的字符串。
+					- :n1,n2s/word1/word2/g →  	n1 与 n2 为数字。在第 n1 与 n2 行之间寻找 word1 这个字符串，并将该字符串取代为 word2 ！
+							例→  :1,60s/word/str/g    
+					- :1,$s/word1/word2/gc →  	从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！且在取代前显示提示字符给用户确认 (confirm) 是否需要取代！(常用)
+
+				8. 解压缩
+
+					- tar -cf imooc.tar imooc  # 压缩
+					- tar -tf imooc.tar   # 查看
+					- tar -tvf imooc.tar  # 查看详细信息
+					- tar -xf imooc.tar   # 解压缩
+
+					- tar -czvf imooc.tar.gz imooc   # 压缩为gz文件
+					- tar -tzvf imooc.tar.gz   #查看
+					- tar -xzvf imooc.tar.gz   # 解压缩
+
+					- 解压至目标文件夹：
+						[ti@localhost soft]$ tar -zxvf jdk-8u181-linux-x64.tar.gz -C ~/app/
+
+				9. 系统用户操作
+					- 添加用户： useradd
+						- useradd ti
+					- 删除用户： userdel
+						- userdel -r ti
+					- 设置密码： passwd
+						- passwd ti (密码输入)
+
+				10. 防火墙设置
+					- 设置防火墙规则：开放80,22端口
+					- 关闭防火墙
+					- 安装： yum install firewalld  (CentOS7默认安装好的)
+					- 确认防火墙已安装好
+						[ti@localhost ~]$ yum list |grep firewalld
+					- 确认服务已启动
+						[ti@localhost ~]$ ps -ef |grep firewalld
+					- 启动： service firewalld start
+					- 检查状态 service firewalld status
+					- 关闭或禁用： service firewalld stop
+					- 关闭开机启动：systemctl disable firewalld.service
+					- systemctl is-enabled firewalld.service
+
+					- firewall-cmd
+						- 查看版本：[root@localhost ~]# firewall-cmd --version
+						- 是否在运行：[root@localhost ~]# firewall-cmd --state
+						- 查看区域：[root@localhost ~]# firewall-cmd --get-zones
+									[root@localhost ~]# firewall-cmd --list-all-zone
+						- 端口：
+							- 查看： [root@localhost ~]# firewall-cmd --query-port=22/tcp
+							- 添加： [root@localhost ~]# firewall-cmd --add-port=22/tcp
+									[root@localhost ~]# firewall-cmd --add-service=ssh
+
+				11. 提权
+					- [root@localhost home]# visudo  （root状态）
+						## Allows people in group wheel to run all commands
+						%wheel  ALL=(ALL)       ALL
+						%imooc  ALL=(ALL)       ALL
+						%ti     ALL=(ALL)       ALL
+						%mmc  ALL=(ALL)       ALL
+
+				12. 文件上传、下载
+					- wget
+						wget http://www.baidu.com
+					- curl
+						[imooc@localhost tmp]$ curl -o baidu.html  http://baidu.com
+
+					- scp
+
+				95. Anaconda
+					- 版本：Anaconda3-4.4.0-Linux-x86_64.sh
+
+					- sudo yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+
+					- vim ~/.bash_profile
+						export PATH=/home/hadoop/anaconda3/bin:$PATH
+
+						export SPARK_HOME=/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0
+						export PATH=$SPARK_HOME/bin:$PATH
+						export PYSPARK_PYTHON=python3.6
+
+					- spark-conf配置（[hadoop@hadoop000 conf]$ vim spark-env.sh）
+						#!/usr/bin/env bash
+						export PYSPARK_PYTHON=/home/hadoop/anaconda3/bin/python3
+						SPARK_LOCAL_IP=127.0.0.1
+
+					- sudo yum -y install epel-release
+					- sudo yum -y install python-pip3
+					- pip install --upgrade pip
+
+					- pip install findspark
+
+					- spyder 设置
+						最终成的配置方法如下：1.安装好JDK SPARK并设置环境变量。
+						2.安装号spyder
+						3.启动spyder
+						在 tools ==> pythonpath manager 中加入如下2个路径
+						/opt/spark/python
+						/opt/spark/python/lib
+						将/opt/spark 替换成自己的spark实际安装目录
+						4.在SPARK_HOME/python/lib 下会有一个类似py4j-0.9-src.zip的压缩文件
+						将其解压到当前目录下（SPARK_HOME/python/lib），否则会报错 找不到py4j
+						重启spyder后就可以正常使用了。
+							unzip
+
+					- 重启
+
+					- easy_install -U pip
+					- python -m pip uninstall pip setuptools
+					
+
+				95. cat
+					- cat sales.csv |head -5
+					- cat sales.csv |tail -5
+
+
+				96. python virtualenvwrapper
+					0. 参考url 
+						https://www.cnblogs.com/hester/p/12369522.html
+					
+
+
+
+
+					5. 使用virtualenvwrapper（进阶）
+
+				97. hadoop用户操作赋权
+						sudo chown -R hadoop:hadoop /home/hadoop
+						sudo chown -R ti:ti /home/ti
+
+
+				98. Apache
+			    - 下载方法：链接+后缀 tar.gz   http://archive.cloudera.com/cdh5/cdh/5/hbase-0.98.6-cdh5.3.0.tar.gz
+				- hadoop-2.5.0
+				- hbase-0.98.6-cdh5.3.0.tar.gz
+				- zookeeper-3.4.5-cdh5.10.0.tar.gz
+
+				99. 其他常用命令
+					- 切换用户 sudo su
+					- 访问文件最后几行：[root@localhost logs]# tail -f access_log 
+
+					- wc计算功能
+						- 读取制定文本的函数： [root@localhost tian]# grep -n "76" imooc.log
+							11:76
+							22:76
+						- 计算行数： [root@localhost tian]# cat imooc.log |wc -l
+						- 计算某个文本个数： 
+							[root@localhost tian]# grep "76" imooc.log |wc -l
+							[root@localhost tian]# grep "2018-08-14" imooc.log |wc -l
+						- 显示某个文本：
+							[root@localhost tian]# grep "76" imooc.log |more
+
+
+
+
+
+					998. 赋予普通账户root权限
+						- chmod 777 /etc/sudoers
+						- 修改上述文件
+							## Allow root to run any commands anywhere 
+							root    ALL=(ALL)       ALL
+							hadoop  ALL=(ALL)       ALL
+							ti  ALL=(ALL)       ALL
+
+
+					999. 修改主机名
+						https://www.cnblogs.com/zhaojiedi1992/p/zhaojiedi_linux_043_hostname.html
+
+						1. 查看主机名：hostnamectl
+						2. 修改主机名：1	3. hosts修改：
+							- [root@localhost ~]# vim /etc/hosts
+							- 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 hadoop11
+
+							https://jingyan.baidu.com/article/0964eca24fea938284f53669.html
+							https://www.linuxidc.com/Linux/2016-10/135886.htm
+
+							1. 查看主机名：hostnamectl
+							2. 修改主机名：hostnamectl set-hostname hadoop000
+							/etc/hosts
+							192.168.0.107   hadoop000
+
+			1）安装（省略）
+
+			2）初始准备工作 start 
+				1.查看IP
+					ifconfig(开始时无法用)
+					ip addr  →ens33
+					su root
+					vi /etc/sysconfig/network-scripts/ifcfg-ens33
+						注：ONBOOT=no 改为 yes  （esc :wq)
+					
+					ip addr
+					service network restart(systemctl restart network)
+					->> centos8 nmcli c reload
+
+
+					yum install net-tools -y
+					yum install vim -y
+					yum install wget -y
+
+					→ 可以使用 ifconfig
+
+				2.替换默认源
+					http://mirrors.163.com/.help/centos.html
+					（http://mirrors.163.com/.help/CentOS7-Base-163.repo）
+
+					1.	yum install wget
+						cd /etc/yum.repos.d/
+						wget http://mirrors.163.com/.help/CentOS7-Base-163.repo
+
+					2.查看版本
+						cat /etc/redhat-release
+					3.
+						mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+						cd /etc/yum.repos.d/
+
+					4.
+						yum clean all
+						yum makecache
+					5. ls查看（163.repo）
+
+				3.安装vim
+					yum install vim
+
+			3）远程连接SHH
+
+				1. 安装SSH
+					1. 安装：yum install openssh-server
+					2. 启动：service sshd start
+					3. 设置开机运行：chkconfig sshd on
+								systemctl enable sshd.service
+				
+				2. Xshell远程登录
+					ssh root@192.168.0.101
+
+				3. 启动sshservice
+					/bin/systemctl start sshd.service
+
+				4. 查看ssh进程
+					ps -ef |grep ssh
+
+				-. ping测试ip是否对
+					ping 192.168.0.***
+					ctl+c 退出当前命令
+
+				5. SSH config （字符串代替IP地址登录）
+					1. root家目录中 touch config
+					2. config设置“imooc”登录
+						vim config
+							host "imooc"
+							    HostName 192.168.0.101
+							    User root
+							    Port 22
+					3. ssh imooc
+
+				6. SSH name登录
+					1. [root@localhost .ssh]# ssh-keygen （名称例：imooc_rsa）			回车-回车
+					2. [root@localhost .ssh]# touch authorized_keys
+					3. cat
+
+			4) WebServer安装、配置
+				1. Appache安装
+					- 安装： yum install httpd
+					- 启动： service httpd start
+					- 停止： service httpd stop
+					- 查看进程： [imooc@localhost tmp]$ ps -ef |grep httpd
+
+					- 浏览器输入ip： 192.168.0.101 （因为防火墙，无法显示网页）
+					- [imooc@localhost tmp]$ sudo netstat -anpl |grep 'http'
+
+				2. Apache的虚拟主机配置及伪静态操作
+					- hosts文件修改：192.168.0.101 www.imooc.test
+						- windows路径 ：C:\Windows\System32\drivers\etc
+								192.168.0.101  www.imooc.test
+								192.168.0.102  www.imooc.test
+								192.168.0.103  www.imooc.test
+								192.168.0.104  www.imooc.test
+								192.168.0.105  www.imooc.test
+								192.168.0.106  www.imooc.test
+								192.168.0.107  www.imooc.test
+								192.168.0.108  www.imooc.test
+								192.168.0.109  www.imooc.test
+								192.168.0.110  www.imooc.test
+						- linux路径： [imooc@localhost www]$ sudo vim /etc/hosts
+
+					- 修改httpd.conf文件
+						-[ti@localhost conf]$ sudo vim /etc/httpd/conf/httpd.conf 
+							# virtual host being defined.
+							#
+							<VirtualHost *:80>
+							        ServerName www.imooc.test
+							        DocumentRoot /data/www
+							</VirtualHost>
+					- 重启：[imooc@localhost conf]$ sudo service httpd restart
+					- 新建/data/www 
+					- 权限更改：
+						[imooc@localhost www]$ sudo chown -R imooc:imooc /data
+					- 新建测试html文件： vim index.html
+
+				3. Nginx安装
+					- 安装：
+						1. rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+
+						2. yum install nginx
+					- 启动： service nginx start
+					- 停止： service nginx stop
+					- 重载： service nginx reload
+					- 查看进程： [imooc@localhost tmp]$ ps -ef |grep nginx
+					- 开机启动： [root@hadoop000 ~]# systemctl enable nginx.service
+
+					[root@mm etc]#  /etc/init.d/nginx start
+
+
+
+					- 配置虚拟主机：
+						- [imooc@localhost conf.d]$ sudo cp default.conf  imooc.conf
+
+								server {
+								    listen       80;
+								    server_name  www.tian.test;
+								    root /data/www;
+								    index  index.html index.htm; 
+								} 
+			 
+					- 192.168.0.108浏览器页面内容设置 
+						[imooc@localhost conf.d]$ sudo vim /usr/share/ng inx/html/index.html 
+			 
+			5）mysql 
+				1. 安装 
+					1. 卸载 yum remove mariadb-libs.x86_64
+
+					2. 下载 wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+
+					3. 本地安装：yum localinstall mysql57-community-release-el7-11.noarch.rpm 
+
+					4. 安装：sudo yum install mysql-community-server
+
+			 			配置文件 		>> 	cat /etc/my.cnf
+			 			数据库主目录 		>>	/var/lib/mysql
+			 			日志文件 		>> 	/var/log/mysqld.log
+
+					5. 启动：systemctl restart mysqld (sudo service mysqld restart)
+
+					6. 获取密码：cat /var/log/mysqld.log |grep password
+						!%Wr#aj4C?d<
+
+					7. [root@localhost tmp]# mysql -uroot -p
+
+				3. use mysql
+					所以你更改密码必须满足：数字、小写字母、大写字母 、特殊字符、长度至少8位
+
+					#mysql> use mysql;
+					mysql> alter  user 'root'@'localhost' identified by '#mmc2014MMC';
+					mysql> flush privileges;	  #刷新
+
+				3. 重置密码
+					1. 免密登录
+						https://blog.csdn.net/qq_28347599/article/details/71915209
+					2. 修改密码
+					mysql> update mysql.user set authentication_string=PASSWORD('123456') where user='root';
+					
+					flush privileges;
+
+					远程root登录
+					update user set host='%' where user='root';
+					flush privileges;
+
+					或者：
+					myssqladmin -u用户名 -p旧密码 password 新密码
+
+				
+				4. 设置简单密码
+					set global validate_password_policy=0;
+					set global validate_password_length=1;
+					SET PASSWORD = PASSWORD('123456');   //123456 是重置的新密码
+					flush privileges;
+
+
+				4.1 重设密码（有效！！）
+					1.  vi /etc/my.cnf，在[mysqld]中添加
+
+					skip-grant-tables
+
+					例如：
+
+					[mysqld]
+					skip-grant-tables
+					datadir=/var/lib/mysql
+					socket=/var/lib/mysql/mysql.sock
+
+					2.  重启mysql
+
+					service mysql restart
+
+					3.  使用用户无密码登录
+
+					mysql -uroot -p (直接点击回车，密码为空)
+
+					4. 选择数据库
+
+					use mysql;
+
+					5. 修改root密码
+
+					update user set authentication_string=password('123456') where user='root';
+
+					6 .刷新权限
+
+					 flush privileges;
+
+					7 .退出
+
+					exit;
+
+					8 .删除第1部增加的配置信息
+
+					skip-grant-tables
+
+					9 .重启mysql
+
+					service mysql restart
+
+
+
+
+
+
+
+
+				5. 远程登录
+					mysql -h39.98.59.77 -uroot -p
+						Enter password:
+						ERROR 1130 (HY000): Host '39.98.59.77' is not allowed to connect to this MySQL server
+					mysql -uroot -p
+					mysql> use mysql;
+					mysql> update user set host='%' where user='root';
+					mysql> flush privileges;
+
+					firewall-cmd --zone=public --add-port=3306/tcp --permanent
+					firewall-cmd --reload
+
+
+
+
+				6. 新建用户
+					什么都没有的数据库
+					- mysql> create user 'imooc'@'%' identified by '123456';
+
+					赋予权限
+					- grant all privileges on *.* to 'imooc'@'%' identified by '123456' with grant option;
+					- [hadoop@hadoop000 ~]$ sudo chown -R hadoop:hadoop /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/logs
+
+				7. 允许root用户在任何地方进行远程登录，并具有所有库任何操作权限，
+
+					具体操作如下：
+
+					在本机先使用root用户登录mysql： mysql -u root -p"youpassword" 进行授权操作：
+
+					mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mmc_999' WITH GRANT OPTION;
+
+					重载授权表：
+
+					FLUSH PRIVILEGES;
+
+					退出mysql数据库：
+
+					exit
+
+			6) hadoop为分布式安装
+				1. java安装
+					1. 解压：[imooc@localhost software]$ sudo tar -zxvf jdk-8u181-linux-x64.tar.gz -C ~/app/
+
+						[hadoop@hadoop000 jdk1.8.0_181]$ pwd
+						/home/hadoop/app/jdk1.8.0_181
+
+
+					2. 环境变量设置添加
+						[hadoop@hadoop000 ~]$ vim ~/.bash_profile 
+
+						添加路径：
+							export JAVA_HOME=/home/hadoop/app/jdk1.8.0_181
+							export PATH=$JAVA_HOME/bin:$PATH
+
+
+					3. 使得环境变量生效
+						[hadoop@hadoop000 ~]$ source ~/.bash_profile
+
+					4. 检查配置成功与否
+						[ti@localhost ~]$ echo $JAVA_HOME
+						/home/imooc/app/jdk1.8.0_181
+					5. 查询java版本
+						java -v
+
+				2. ssh安装
+					1. yum安装
+						sudo yum install ssh
+
+					2. 免密登录
+						ssh-keygen -t rsa
+						生成：
+						Enter file in which to save the key (/home/imooc/.ssh/id_rsa): 
+						[hadoop@hadoop000 .ssh]$ cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+
+					3. 验证
+						ssh localhost
+						ssh hadoop000
+
+
+				3. hadoop安装 
+					0. 网址参考
+						http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.7.6/hadoop-project-dist/hadoop-common/SingleCluster.html
+					1. 解压
+						sudo tar -zxvf hadoop-2.6.0-cdh5.7.0.tar.gz -C ~/app/
+								/home/hadoop/app/
+
+
+					2. 配置文件修改 hadoop-env.sh（etc/hadoop
+						[imooc@localhost hadoop]$ sudo vim hadoop-env.sh
+
+						export JAVA_HOME=/home/hadoop/app/jdk1.8.0_181
+
+					3. etc/hadoop/core-site.xml:
+						[imooc@localhost hadoop]$ sudo vim core-site.xml 
+
+						<configuration>
+							<property>
+							    <name>fs.defaultFS</name>
+							    <value>hdfs://localhost:8020</value>
+							</property>
+
+							<property>
+							    <name>hadoop.tmp.dir</name>
+							    <value>/home/hadoop/app/tmp</value>
+							</property>
+						</configuration>
+
+					4. etc/hadoop/hdfs-site.xml:
+						[imooc@localhost hadoop]$ sudo vim hdfs-site.xml 
+
+
+						<configuration>
+						    <property>
+						        <name>dfs.replication</name>
+						        <value>1</value>
+						    </property>
+						    <property>
+						        <name>dfs.permissions.enabled</name>
+						        <value>false</value>
+						    </property>
+						</configuration>
+
+
+					5. slaves
+						配置dataNode
+
+					5.1 /etc/hosts
+						127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 hadoop000
+						::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+						192.168.0.101 hadoop000
+						192.168.0.102 hadoop000
+						192.168.0.103 hadoop000
+						192.168.0.104 hadoop000
+						192.168.0.105 hadoop000
+						192.168.0.106 hadoop000
+						192.168.0.107 hadoop000
+						192.168.0.108 hadoop000
+						192.168.0.109 hadoop000
+
+						10.101.1.48     hadoop000
+						10.101.1.36     hadoop000
+						10.101.1.109    hadoop000
+						10.101.1.91    hadoop000
+
+
+					5.2 native
+						https://blog.csdn.net/jack85986370/article/details/51902871
+
+						sudo tar -xvf hadoop-native-64-2.6.0.tar -C /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/lib/native
+						sudo tar -xvf hadoop-native-64-2.6.0.tar -C /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/lib/
+
+						[hadoop@hadoop000 etc]$ sudo vi /etc/profile
+						export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+						export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
+
+						export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+						export HADOOP_HOME=/home/hadoop/app/hadoop-2.6.0-cdh5.7.0
+
+						export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib:$HADOOP_COMMON_LIB_NATIVE_DIR"
+
+						生效：
+						source /etc/profile
+
+
+					6. 启动hdfs
+						1. 格式化文件系统（仅第一次执行即可）
+							sudo chown -R hadoop:hadoop /home/hadoop/app/tmp   # tmp文件夹权限设置
+
+							[hadoop@hadoop000 bin]$ ./hdfs namenode -format
+
+						2. 启动
+							[imooc@localhost sbin]$ ./start-dfs.sh 
+
+						3. 创建、修改logs文件权限
+							[hadoop@localhost hadoop-2.5.0-cdh5.3.0]$ sudo mkdir logs
+							[hadoop@hadoop000 ~]$ sudo chown -R hadoop:hadoop /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/logs
+
+						4. http://hadoop000:50070
+
+						5. 格式化后datanode无法启动问题：
+							https://jingyan.baidu.com/article/3c343ff7e75e9e0d36796347.html
+
+			7) HDFS shell操作
+				- ls、mkdir、put、get、rm、
+
+				- 配置HADOOP_HOME
+					vi ~/.bash_profile
+
+					export HADOOP_HOME=/home/hadoop/app/hadoop-2.6.0-cdh5.7.0
+					export PATH=$HADOOP_HOME/bin:$PATH
+
+
+					source ~/.bash_profile
+
+					[hadoop@localhost bin]$ echo $HADOOP_HOME
+
+				- 
+					[hadoop@localhost data]$ vi hello.txt
+					[hadoop@localhost data]$ hadoop fs -ls /
+					[hadoop@localhost data]$ hadoop fs -put helle.txt  /
+
+					[hadoop@localhost data]$ hadoop fs -ls /
+
+					put复制文件
+					hadoop fs -put helle.txt /h1.txt
+
+					查看hdfs文件内容：
+					hadoop fs -text /helle.txt
+					hadoop fs -tail /Hamlet.txt
+
+				
+					创建hdfs目录：
+					hadoop fs -mkdir /test
+
+					创建递归目录：
+					hadoop fs -mkdir -p /test1/a/b/c
+
+					递归展示：
+					hadoop fs -lsr /
+					hadoop fs -ls -R /
+
+					copyFromLocal：
+					hadoop fs -copyFromLocal helle.txt /test1/a
+					hadoop fs -copyFromLocal helle.txt /test1/h.txt
+
+					get复制：
+					hadoop fs -get /test1/h.txt 
+
+					删除文件：
+					hadoop fs -rm /test1/a/helle.txt
+
+					删除文件夹：
+					hadoop fs -rm -R /test
+
+					浏览器查看:
+					http://192.168.0.109:50070
+
+					随机返回指定行数的样本数据 
+					hadoop fs -cat /test/gonganbu/scene_analysis_suggestion/* | shuf -n 5
+
+					返回前几行的样本数据 
+					hadoop fs -cat /test/gonganbu/scene_analysis_suggestion/* | head -100
+
+					返回最后几行的样本数据 
+					hadoop fs -cat /test/gonganbu/scene_analysis_suggestion/* | tail -5
+
+					查看文本行数 
+					hadoop fs -cat hdfs://172.16.0.226:8020/test/sys_dict/sysdict_case_type.csv |wc -l
+
+					查看文件大小(单位byte) 
+					hadoop fs -du hdfs://172.16.0.226:8020/test/sys_dict/*
+
+					hadoop fs -count hdfs://172.16.0.226:8020/test/sys_dict/*
+
+					---------------------
+
+					本文来自 Ronney-Hua 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/github_38358734/article/details/79272521?utm_source=copy 
+
+					修改权限：
+					
+			9) yarn
+				1. 不同的计算框架可以共享同一个HDFS集群上的数据，享受整体的资源调度
+					XXX on YARN
+				2. YARN环境搭建
+					1- sudo vim mapred-site.xml (etc/hadoop目录中，先复制 cp 文件， 文件)
+					    <property>
+					        <name>mapreduce.framework.name</name>
+					        <value>yarn</value>
+					    </property>
+					2- sudo vim yarn-site.xml
+			    <property>
+			        <name>yarn.nodemanager.aux-services</name>
+			        <value>mapreduce_shuffle</value>
+			    </property>
+
+					3- 启动
+						$ sbin/start-yarn.sh
+
+					4- 验证：
+						jps
+							1617 DataNode
+							6020 NodeManager
+							1770 SecondaryNameNode
+							5930 ResourceManager
+							1500 NameNode
+							6316 Jps
+
+						ResourceManager - http://hadoop11:8088/
+					5- Run a MapReduce job.
+					6- stop the daemons with: sbin/stop-yarn.sh (虚拟机关机前停止)
+
+				3. 初识提交PI的MapReduce作业到YARN上执行
+					a. 案例路径：/home/hadoop/app/hadoop-2.6.0-cdh5.7.0/share/hadoop/mapreduce
+					   包名：hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar
+
+					b. hadoop jar 运行：
+						- hadoop jar hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar pi 2 3  
+							参数：Usage: org.apache.hadoop.examples.QuasiMonteCarlo <nMaps> <nSamples>
+
+						- http://localhost:8088
+
+						- 正式项目中 jar 是自己开发的 
+
+				99. 启动HDFS
+					a. vim /etc/hosts
+					b. hosts
+						10.101.1.48	localhost
+					c. ./stop-all.sh
+					d. ./start-dfs.sh
+					e. jps或http://localhost:50070
+					f. sbin/start-yarn.sh      验证：http://hadoop000:8088/
+
+			10)PySpark(pk)
+				0. 资料：
+					1）官网 https://spark.apache.org
+					2）源码 https://github.com/apache/spark/
+				1. 环境安装
+					1) jdk
+					2) scala
+						- 安装：[hadoop@hadoop000 softwear]$ tar -zxvf scala-2.11.8.tgz -C ~/app/
+						- [hadoop@hadoop000 scala-2.11.8]$ vim ~/.bash_profile
+
+								export SCALA_HOME=/home/hadoop/app/scala-2.11.8
+								export PATH=$SCALA_HOME/bin:$PATH
+						- source ~/.bash_profile
+
+					3) hadoop
+						- 安装
+						- vim ~/.bash_profile
+								export HADOOP_HOME=/home/hadoop/app/hadoop-2.6.0-cdh5.7.0
+								export PATH=$HADOOP_HOME/bin:$PATH
+
+
+						- [hadoop@hadoop000 hadoop]$ vim hadoop-env.sh
+
+								# export JAVA_HOME=${JAVA_HOME}
+								export JAVA_HOME=/home/hadoop/app/jdk1.8.0_181
+
+						- [hadoop@hadoop000 hadoop]$ vim core-site.xml 
+							    <property>
+							        <name>fs.default.name</name>
+							        <value>hdfs://hadoop000:8020</value>
+							    </property>
+
+
+						- [hadoop@hadoop000 hadoop]$ vim hdfs-site.xml 
+								<property>
+								    <name>dfs.namenode.name.dir</name>
+								    <value>/home/hadoop/app/tmp/dfs/name</value>
+								</property>
+
+								<property>
+								    <name>dfs.datanode.data.dir</name>
+								    <value>/home/hadoop/app/tmp/dfs/data</value>
+								</property>
+
+								<property>
+								    <name>dfs.replication</name>
+								    <value>1</value>
+								</property>
+						- [hadoop@hadoop000 hadoop]$ cp mapred-site.xml.template mapred-site.xml
+						  [hadoop@hadoop000 hadoop]$ vim mapred-site.xml
+
+								<property>
+								    <name>mapreduce.framework.name</name>
+								    <value>yarn</value>
+								</property>
+
+			            - [hadoop@hadoop000 hadoop]$ vim yarn-site.xml 
+				<property>
+			        <name>yarn.nodemanager.aux-services</name>
+			        <value>mapreduce_shuffle</value>
+			    </property>
+
+						- [hadoop@hadoop000 hadoop]$ vim slaves 
+								主机名
+
+
+						- 格式化：[hadoop@hadoop000 bin]$ ./hdfs namenode -format
+
+						- 启动：[hadoop@hadoop000 sbin]$ ./start-dfs.sh
+
+						- 使用dfs：
+								[hadoop@hadoop000 sbin]$ hadoop fs -ls /
+								[hadoop@hadoop000 sbin]$ hadoop fs -mkdir /test
+								[hadoop@hadoop000 hadoop-2.6.0-cdh5.7.0]$ hadoop fs -put README.txt  /test/
+
+						- native（报错解除）
+								https://blog.csdn.net/jack85986370/article/details/51902871
+
+								sudo tar -xvf hadoop-native-64-2.6.0.tar -C /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/lib/native
+								sudo tar -xvf hadoop-native-64-2.6.0.tar -C /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/lib/
+
+								[hadoop@hadoop000 etc]$ sudo vi /etc/profile
+									export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+									export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"
+
+									export  HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+									export  HADOOP_HOME=/home/hadoop/app/hadoop-2.6.0-cdh5.7.0
+
+									export  HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib:$HADOOP_COMMON_LIB_NATIVE_DIR"
+
+								生效：
+								source /etc/profile
+
+					4) maven
+						- 安装：tar -zxvf apache-maven-3.3.9-bin.tar.gz -C ~/app/
+						- vim ~/.bash_profile 
+								export MAVEN_HOME=/home/hadoop/app/apache-maven-3.3.9
+								export PATH=$MAVEN_HOME/bin:$PATH
+						- 
+								[hadoop@hadoop000 apache-maven-3.3.9]$ cd conf
+								[hadoop@hadoop000 conf]$ vim settings.xml 
+
+									[hadoop@hadoop000 ~]$ mkdir maven_repository
+										  <!-- localRepository
+										   | The path to the local repository maven will use to store artifacts.
+										   |
+										   | Default: ${user.home}/.m2/repository
+										  <localRepository>/path/to/local/repo</localRepository>
+										  -->
+										<localRepository>/home/hadoop/maven_repository</localRepository>
+
+									[hadoop@hadoop000 conf]$ mvn
+										[INFO] Scanning for projects...
+										[INFO] ------------------------------------------------------------------------
+										[INFO] BUILD FAILURE
+										[INFO] ------------------------------------------------------------------------
+										[INFO] Total time: 0.154 s
+										[INFO] Finished at: 2018-09-11T23:12:10+08:00
+										[INFO] Final Memory: 4M/29M
+
+					5) python
+						- 基础环境安装
+								gcc安装：[root@hadoop000 ~]# yum install gcc
+								gccc++安装：[root@hadoop000 ~]# yum install gcc-c++   
+
+						- 安装：
+								[hadoop@hadoop000 softwear]$ tar -zxvf Python-3.6.5.tgz   #解压到本地、准备编译安装
+						- 依赖包下载：
+								进入Python解压包：cd Python-3.6.5
+
+								sudo yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+
+						- 编译：
+								[hadoop@hadoop000 app]$ mkdir python3    #创建路径包
+								/home/hadoop/app/python3    #编译路径
+								[hadoop@hadoop000 Python-3.6.5]$ ./configure --prefix=/home/hadoop/app/python3
+
+								[hadoop@hadoop000 Python-3.6.5]$ make && make install
+
+						- vim ~/.bash_profile:
+								export PATH=/home/hadoop/app/python3/bin:$PATH
+							source ~/.bash_profile
+
+						- 运行：python3
+						- 退出：quit();
+						- 版本检验：[hadoop@hadoop000 Python-3.6.5]$ python3 --version
+
+					6) spark
+						- 安装：
+							[hadoop@hadoop000 softwear]$ tar -zxvf spark-2.3.0.tgz   #本地解包
+
+						- pom.xml配置：
+							[hadoop@hadoop000 spark-2.3.0]$ vim pom.xml 
+							搜 <repositories>标签!!!! 之内添加
+								<repository>
+								<id>cloudera</id>
+								<name>cloudera Repository</name>
+								<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+								</repository>
+
+						- 编译：
+							[hadoop@hadoop000 spark-2.3.0]$ cd dev/
+						   ./dev/make-distribution.sh --name 2.6.0-cdh5.7.0 --tgz  -Pyarn -Phadoop-2.6 -Phive -Phive-thriftserver -Dhadoop.version=2.6.0-cdh5.7.0
+
+						- 解压tar包至app：tar -zxvf spark-2.3.0-bin-2.6.0-cdh5.7.0.tgz -C ~/app/
+						- 尝试启动：[hadoop@hadoop000 bin]$ ./spark-shell 
+						- 浏览器查看：http://hadoop000:4042/
+
+				2. spark启动
+					0.0) 设置默认启动python3
+							[hadoop@hadoop000 conf]$ cp spark-env.sh.template spark-env.sh
+
+							vim spark-env.sh
+								export PYSPARK_PYTHON=/home/hadoop/app/python3/bin/python3  
+								SPARK_LOCAL_IP=127.0.0.1
+
+					0.1) [hadoop@hadoop000 spark-2.3.0-bin-2.6.0-cdh5.7.0]$ vim ~/.bash_profile
+								export SPARK_HOME=/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0
+								export PATH=$SPARK_HOME/bin:$PATH
+								export PYSPARK_PYTHON=python3.6
+
+			  
+
+					1) /home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/python/pyspark
+
+					2) [hadoop@hadoop000 bin]$ ./pyspark 
+
+					3）>>> sc
+						<SparkContext master=local[*] appName=PySparkShell>
+
+					4）[hadoop@hadoop000 bin]$ ./pyspark --master local[4]
+
+				3. RDD
+					0） 两种方式
+							- Parallelized Collections
+							- External Datasets
+					1） RDD创建 （Parallelized Collections）
+						a. 启动：[hadoop@hadoop000 bin]$ ./pyspark --master local[2]
+
+						b. 集合转RDD：
+								>>> data = [1,2,3,4,5]
+								>>> distData=sc.parallelize(data)
+
+								>>> data
+								[1, 2, 3, 4, 5]
+								>>> distData
+								ParallelCollectionRDD[1] at parallelize at PythonRDD.scala:175
+
+						c. 输出
+								>>> distData.collect()
+
+						d. 计算,拆分数据
+								>>> distData.reduce(lambda a,b :a+b)
+								15      
+								>>> distData = sc.parallelize(data,5)	#分partition
+								** Typically you want 2-4 partitions for each CPU in your cluster.
+
+						e. External Datasets
+
+					2) 导入外部数据文件：
+						a. 本地文件读取
+								>>> sc.textFile("file:///home/hadoop/data/hello.txt").collect()
+
+						b. hdfs文件读取
+								>>> sc.textFile("hdfs://hadoop000:8020/hello.txt").collect()
+
+						c. 测试
+								>>> distFile = sc.textFile("hdfs://hadoop000:8020/hello.txt")
+								>>> distFile.collect()
+								['hello python', 'hello saprk', 'hello pyspark', 'helle python java html']
+								>>> distFile
+								hdfs://hadoop000:8020/hello.txt MapPartitionsRDD[5] at textFile at NativeMethodAccessorImpl.java:0
+								>>> distFile.map(lambda s:len(s)).reduce(lambda a,b:a+b)
+								58        
+						d. wholeTextFiles
+								>>> sc.wholeTextFiles("hdfs://hadoop000:8020/hello.txt").collect()
+								[('hdfs://hadoop000:8020/hello.txt', 'hello python\nhello saprk\nhello pyspark\nhelle python java html\n')]
+								## 以键值对的形式返回
+
+						e. Saving and Loading SequenceFiles
+								>>> rdd = sc.parallelize(range(1, 4)).map(lambda x: (x, "a" * x))
+								>>> rdd.saveAsSequenceFile("path/to/file")
+								>>> sorted(sc.sequenceFile("path/to/file").collect())
+								[(1, u'a'), (2, u'aa'), (3, u'aaa')]
+
+						f. 保存数据再测试
+								>>> data = [1,2,3,4,5]
+								>>> disData =sc.parallelize(data)
+								>>> disData.saveAsTextFile("/home/hadoop/data/output/")
+								[hadoop@hadoop000 output]$ cat part-0000*
+
+				4. pycharm
+					0) 网页参考：https://www.linuxidc.com/Linux/2018-04/152003.htm
+					1) 下载：wget https://download.jetbrains.com/python/pycharm-professional-2018.1.tar.gz
+					2) 解压：tar -zxvf
+					3) pip install pyspark
+					4) Environment Variables:
+								pycharm：先建立新的project，new directory，new python文件
+								右上角：hello，角标，Edit configurations
+								Environment Variables:
+								PYTHONPATH		/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/python
+								SPARK_HOME		/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0
+					4.1) 启动   [hadoop@hadoop000 bin]$ ./pycharm.sh
+
+					5) Project Structure  +add content root
+								/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/python/lib
+									py4j-0.10.6-src.zip
+									pyspark.zip
+
+					6) 测试：
+								from pyspark import SparkConf, SparkContext
+
+								# 创建SparkConf：设置的是Spark相关的参数信息
+								conf = SparkConf().setMaster("local[2]").setAppName("spark0301")
+
+								# 创建SparkContext
+								sc = SparkContext(conf=conf)
+
+								# 业务逻辑
+								data = [1, 2, 3, 4, 5]
+								distData = sc.parallelize(data)
+								print(distData.collect())
+
+								# 好的习惯
+								sc.stop()
+
+					7) 提交pyspark作业到服务器上运行
+							a. 创建py脚本文件
+									根目录下 mkdir script
+									vi spark0301.py
+										from pyspark import SparkConf, SparkContext
+
+										# 创建SparkConf：设置的是Spark相关的参数信息
+										conf = SparkConf()
+
+										# 创建SparkContext
+										sc = SparkContext(conf=conf)
+
+										# 业务逻辑
+										data = [1, 2, 3, 4, 5]
+										distData = sc.parallelize(data)
+										print(distData.collect())
+
+										# 好的习惯
+										sc.stop()
+							b. 提交spar程序运行：./spark-submit
+									[hadoop@hadoop000 bin]$ ./spark-submit --master local[2] --name saprk0301 /home/hadoop/script/spark0301.py
+
+							c. 具体详见：
+									http://spark.apache.org/docs/latest/submitting-applications.html
+
+				5. RDD Operation   -------> transformation
+					0) a. transformations
+							create a new dataset from an existing one
+
+							RDDA -------transformation--------> RDDB
+
+							y=f(x)
+							rddb = rdda.map(....)
+
+							All transformations in Spark are lazy
+							rdda.map().filter().....
+
+							比如：map/filter/group by /distinct.....
+
+						b. action
+								which return a value to the driver program after running a computation on the dataset.
+
+								比如：count/reduce/collect....
+
+
+					1）map
+							 map(func)
+							 将func函数作用到数据集的每一个元素上，生成一个新的数据集并返回
+
+							from pyspark import SparkConf, SparkContext
+
+							if __name__ == '__main__':
+							    conf = SparkConf().setMaster("local[2]").setAppName("spark0401")
+							    sc = SparkContext(conf = conf)
+
+							    def my_map():
+							        data = [1,2,3,4,5]
+							        rdd1 = sc.parallelize(data)
+							        rdd2 = rdd1.map(lambda x: x*2)
+							        print(rdd2.collect())
+
+							    def my_map2():
+							        a = sc.parallelize(['dog','tiger','lion','cat'])
+							        b = a.map(lambda x:(x,1))
+							        print(b.collect())s
+
+							    my_map2()
+
+							    sc.stop()
+					2) filter:
+							    def my_filter():
+							        data = [1,2,3,4,5]
+							        rdd1 = sc.parallelize(data)
+							        mapRdd = rdd1.map(lambda x:x*2)
+							        filterRdd = mapRdd.filter(lambda x: x>5)
+							        print(filterRdd.collect())
+
+							        print(sc.parallelize(data).map(lambda x:x*2).filter(lambda x:x<5).collect())
+
+					3) faltMap:
+							    def my_flatMap():
+							        data = ['hello spark','hello world','hello world']
+							        rdd = sc.parallelize(data)
+							        print(rdd.flatMap(lambda line:line.split(' ')).collect())
+							        #output:['hello', 'spark', 'hello', 'world', 'hello', 'world']
+
+					4) groupByKey:
+							    def my_groupBy():
+							        data = ['hello spark','hello world','hello world']
+							        rdd = sc.parallelize(data)
+							        mapRdd = rdd.flatMap(lambda line:line.split(' ')).map(lambda x:(x,1))
+							        groupByRdd = mapRdd.groupByKey()
+							        print(mapRdd.collect())
+							        print(groupByRdd.collect())
+							        print(groupByRdd.map(lambda x:{x[0]:list(x[1])}).collect())
+					
+					5) reduceByKey:
+							    def my_reduceByKey():
+							        data = ['hello spark','hello world','hello world']
+							        rdd = sc.parallelize(data)
+							        mapRdd = rdd.flatMap(lambda line:line.split(' ')).map(lambda x:(x,1))
+							        reduceByKeyRdd = mapRdd.reduceByKey(lambda a,b: a+b).collect()
+							        print(reduceByKeyRdd)
+
+					6) sortByKey:
+							    def my_sortByKey():
+							        data = ['hello spark', 'hello world', 'hello world']
+							        rdd = sc.parallelize(data)
+							        mapRdd = rdd.flatMap(lambda line:line.split(' ')).map(lambda x:(x,1))
+							        reduceByKeyRdd = mapRdd.reduceByKey(lambda a,b:a+b)
+							        print(reduceByKeyRdd.map(lambda x: (x[1], x[0])).sortByKey(False).map(lambda x: (x[1], x[0])).collect())
+
+					7) union
+							    def my_union():
+							        a = sc.parallelize([1,2,3,4,5])
+							        b = sc.parallelize((100,200,300))
+							        print(a.union(b).collect())
+
+					8) distinct
+							    def my_distinct():
+							        a = sc.parallelize([1,2,3,4,5])
+							        b = sc.parallelize((1,3,4,6,7))
+							        print(a.union(b).distinct().collect())
+
+					9) join
+							a. join(内连接)
+								    def my_join():
+								        a = sc.parallelize([('A','a1'),('C','c1'),('D','d1'),('F','f1'),('F','f2')])
+								        b = sc.parallelize([('A','a2'),('C','c2'),('C','c3'),('E','e1')])
+								        print(a.join(b).collect())
+							b. a.leftOuterJoin(b).collect()
+									[('A', ('a1', 'a2')), ('F', ('f1', None)), ('F', ('f2', None)), ('C', ('c1', 'c2')), ('C', ('c1', 'c3')), ('D', ('d1', None))]
+
+							c. a.rightOuterJoin(b).collect()
+									[('A', ('a1', 'a2')), ('C', ('c1', 'c2')), ('C', ('c1', 'c3')), ('E', (None, 'e1'))]
+
+							d. a.fullOuterJoin(b).collect()
+									[('A', ('a1', 'a2')), ('F', ('f1', None)), ('F', ('f2', None)), ('C', ('c1', 'c2')), ('C', ('c1', 'c3')), ('D', ('d1', None)), ('E', (None, 'e1'))]
+
+				5. RDD Operation   -------> action
+					0) 主要项目：
+						- collect
+						- count
+						- take
+						- reduce
+						- saveAsTextFile
+						- foreach
+						-...
+					1) 用法
+						    def my_action():
+						        data = [1,2,3,4,5,6,7,8,9,10]
+						        rdd = sc.parallelize(data)
+						        rdd.collect()
+						        rdd.count()
+						        rdd.take(3)
+						        rdd.max()
+						        rdd.min()
+						        rdd.sum()
+						        rdd.reduce(lambda x,y:x+y)
+						        rdd.foreach(lambda x: print(x))
+						        rdd.saveAsTextFile("/home/hadoop/data/output1/")
+
+					2）实战（词频统计）
+							- 思路：
+								a. input 1-n文件、文件夹、后缀
+									hello spark
+									hello hadoop
+									hello welcome
+								b. 开发步骤
+									- 文本内容每一行转成单个单词 flatMap
+									- 单词--> （单词,1) map
+									- 单词计数相加 reduceByKey
+
+								c. file:///home/hadoop/data/hello.txt   	#spark0402 下角标 ---->  paramenters选项中填写路径
+
+								d. 词频统计pycharm代码：
+										from pyspark import SparkConf, SparkContext
+										import sys
+
+
+										if __name__ == '__main__':
+
+										    if len(sys.argv) !=2:
+										        print('Usage: wordcount <input>', file=sys.stderr)
+										        sys.exit(-1)
+
+
+										    conf = SparkConf()
+										    sc = SparkContext(conf=conf)
+
+										    def printResult():
+										        counts = sc.textFile(sys.argv[1]) \
+										            .flatMap(lambda line:line.split(" "))\
+										            .map(lambda x:(x,1))\
+										            .reduceByKey(lambda a,b:a+b)
+										        output = counts.collect()
+
+										        for (word,count) in output:
+										            print('%s: %i' % (word,count))
+
+										    printResult()
+
+										    sc.stop()
+								e. 提交./pyspark-submit
+										[hadoop@hadoop000 bin]$ ./spark-submit --master local[2] --name spark0402 /home/hadoop/script/spark0402.py file:///home/hadoop/data/hello.txt
+
+								f. 执行多文件，（可以处理文件夹）
+										#	18/09/16 16:16:17 INFO FileInputFormat: Total input paths to process : 4
+										[hadoop@hadoop000 bin]$ ./spark-submit --master local[2] --name spark0402 /home/hadoop/script/spark0402.py file:///home/hadoop/data/wc
+
+								g. 支持模糊匹配文件后缀
+										[hadoop@hadoop000 bin]$ ./spark-submit --master local[2] --name spark0402 /home/hadoop/script/spark0402.py file:///home/hadoop/data/wc/*.txt
+
+								h. savaFile(文件形式导出)   # 必须没有该文件夹，必须删除！！！
+										#	配置 sys.argv[2]
+										#	追加 spark0402 下角标 ---->  paramenters选项中填写路径
+										#   如果要从hdfs中调用数据的话，设置sys.argv[1]即可
+
+												import sys
+												from pyspark import SparkConf, SparkContext
+
+												if __name__ == '__main__':
+
+												    if len(sys.argv) != 3:
+												        print("Usage: wordcount <input> <output>", file=sys.stderr)
+												        sys.exit(-1)
+
+												    conf = SparkConf()
+												    sc = SparkContext(conf=conf)
+
+
+												    def printResult():
+												        counts = sc.textFile(sys.argv[1]) \
+												            .flatMap(lambda line: line.split("\t")) \
+												            .map(lambda x: (x, 1)) \
+												            .reduceByKey(lambda a, b: a + b)
+
+												        output = counts.collect()
+
+												        for (word, count) in output:
+												            print("%s: %i" % (word, count))
+
+
+											    def saveFile():
+											        sc.textFile(sys.argv[1]) \
+											            .flatMap(lambda line: line.split(" ")) \
+											            .map(lambda x: (x, 1)) \
+											            .reduceByKey(lambda a, b: a + b) \
+											            .saveAsTextFile(sys.argv[2])
+
+											    def printS():
+											        print(sys.argv[0])  # 打印第一个参数
+											        print(sys.argv[1])  # 打印第二个参数
+											        print(sys.argv[2])  # 打印第3个参数
+
+											    #printS()
+											    saveFile()
+
+											    sc.stop()
+										[hadoop@hadoop000 bin]$ ./spark-submit --master local[2] --name spark0402 /home/hadoop/script/spark0402.py file:///home/hadoop/data/wc file:///home/hadoop/tmp/wc
+
+										### 输入、输出路径全部需要
+
+								i. TopN统计
+											import sys
+											from pyspark import SparkConf, SparkContext
+
+											if __name__ == '__main__':
+
+											    if len(sys.argv) != 2:
+											        print("Usage: topn <input>", file=sys.stderr)
+											        sys.exit(-1)
+
+											    conf = SparkConf()
+											    sc = SparkContext(conf=conf)
+
+											    counts = sc.textFile(sys.argv[1]) \
+											        .map(lambda x: x.split('\t')) \
+											        .map(lambda x: (x[5], 1)) \
+											        .reduceByKey(lambda a, b: a+b) \
+											        .map(lambda x:(x[1], x[0])) \
+											        .sortByKey(False) \
+											        .map(lambda x:(x[1], x[0])) \
+											        .take(5)
+
+											    for (word, count) in counts:
+											        print("%s: %i" % (word, count))
+
+											    sc.stop()
+
+										# submiit应用提交
+												./spark-submit --master local[2] --name spark0403 /home/hadoop/script/spark0403.py file:///home/hadoop/data/page_views.dat
+
+
+									j. 统计平均年龄：
+										id  age
+										975 50
+										976 92
+										977 52
+										978 49
+										979 84
+											开发步骤分析
+												1）取出年龄		map
+												2) 计算年龄总和	reduce
+												3) 计算记录总数	count
+												4) 求平均数
+
+												import sys
+												from pyspark import SparkConf, SparkContext
+
+												if __name__ == '__main__':
+
+												    if len(sys.argv) != 2:
+												        print("Usage: avg <input>", file=sys.stderr)
+												        sys.exit(-1)
+
+												    conf = SparkConf()
+												    sc = SparkContext(conf=conf)
+
+												    ageData = sc.textFile(sys.argv[1]).map(lambda x:x.split(' ')[1])
+												    totalAge = ageData.map(lambda age:int(age)).reduce(lambda a,b:a+b)
+												    counts = ageData.count()
+												    avgAge = totalAge/counts
+
+												    print(counts)
+												    print(totalAge)
+												    print(avgAge)
+
+												    sc.stop()
+
+
+										- 提交运行：./spark-submit --master local[2] --name spark0404 /home/hadoop/script/spark0404.py file:///home/hadoop/data/sample_age_data.txt
+
+
+
+									k. 控制台
+										>>> rdd1 = sc.textFile('/home/hadoop/data/sample_age_data.txt',2)
+										>>> ageData = rdd1.map(lambda x:x.split(' ')[1]).map(lambda age:int(age))
+										>>> totalAge = ageData.reduce(lambda a,b:a+b)
+										>>> counts = ageData.count()
+										>>> avgAge = totalAge/counts
+
+
+					3) 运行模式
+						0）各种模式
+							- local    
+							- standalone
+							- yarn
+							- mesos
+							- Kubernetes
+						1) local
+								./spark-submit --master local[2] --name spark-local /home/hadoop/script/spark0402.py file:///home/hadoop/data/hello.txt file:///home/hadoop/wc/output
+
+						2）standalone
+								和以下一样：
+								hdfs:NameNode DataNode
+								yarn:ResourceManager NodeManager
+
+								a) 配置conf
+									-slave
+										路径:/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/conf
+										# A Spark Worker will be started on each of the machines listed below.
+										hadoop000
+										#hadoop001
+
+
+										假设你有5台机器，就应该进行如下slaves的配置
+										hadoop000
+										hadoop001
+										hadoop002
+										hadoop003
+										hadoop005
+										如果是多台机器，那么每台机器都在相同的路径下部署spark
+
+									-spark-env.sh
+										[hadoop@hadoop000 conf]$ vim spark-env.sh
+
+										#!/usr/bin/env bash
+										export PYSPARK_PYTHON=/home/hadoop/app/python3/bin/python3
+										JAVA_HOME=/home/hadoop/app/jdk1.8.0_181
+
+
+								b) 运行
+										[hadoop@hadoop000 sbin]$ ./start-master.sh
+
+										[hadoop@hadoop000 sbin]$ cat /home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/logs/spark-hadoop-org.apache.spark.deploy.master.Master-1-hadoop000.out
+
+
+								c) 验证启动成功
+										jps： Master和Worker进程，就说明我们的standalone模式安装成功
+										webUI：
+											Starting Spark master at spark://localhost:7077
+											Bound MasterWebUI to 0.0.0.0, and started at http://192.168.0.107:8080/  #集群webUI
+
+
+
+										    URL: spark://localhost:7077
+										    REST URL: spark://localhost:6066 (cluster mode)
+										    Alive Workers: 1      						##### 就是hadoop000
+										    Cores in use: 1 Total, 0 Used
+										    Memory in use: 1024.0 MB Total, 0.0 B Used
+										    Applications: 0 Running, 0 Completed
+										    Drivers: 0 Running, 0 Completed
+										    Status: ALIVE
+
+								d) 提交
+										[hadoop@hadoop000 bin]$ ./pyspark --master spark://localhost:7077 
+										#data、sc.para、collect等可以在webUI上查看
+
+
+								e) spark-submit模式
+										./spark-submit --master spark://hadoop000:7077 --name spark-standalone /home/hadoop/script/spark0402.py hdfs://hadoop000:8020/wc.txt hdfs://hadoop000:8020/wc/output
+
+										如果使用standalone模式，而且你的节点个数大于1的时候，如果你使用本地文件测试，必须要保证每个节点上都有本地测试文件
+
+
+								ps) 要在spark-env.sh中添加JAVA_HOME，否则会报错
+
+
+						3) yarn模式（必须掌握!!!!!!)
+								0) 概述：
+										mapreduce yarn
+										spark on yarn 70%
+										spark作业客户端而已，他需要做的事情就是提交作业到yarn上去执行
+										yarn vs standalone
+											yarn： 你只需要一个节点，然后提交作业即可   这个是不需要spark集群的（不需要启动master和worker的）
+											standalone：你的spark集群上每个节点都需要部署spark，然后需要启动spark集群（需要master和worker）
+								1) 配置
+										[hadoop@hadoop000 conf]$ vim spark-env.sh
+											HADOOP_CONF_DIR=/home/hadoop/app/hadoop-2.6.0-cdh5.7.0/etc/hadoop
+
+								2) 部署模式
+										- yarn支持client和cluster模式：driver运行在哪里
+											client：提交作业的进程是不能停止的，否则作业就挂了
+											cluster：提交完作业，那么提交作业端就可以断开了，因为driver是运行在am里面的
+
+										- Error: Cluster deploy mode is not applicable to Spark shells.
+											交互式只能跑在client模式
+
+								3) 如何查看已经运行完的yarn日志信息
+										- [hadoop@hadoop000 bin]$ yarn logs -applicationId application_1537703829534_0003
+											# 必须先开日志功能：Log aggregation has not completed or is not enabled.
+											# 参见：https://coding.imooc.com/class/chapter/128.html#Anchor  JobHistory使用
+
+					4) spark core 进阶	
+							1. Spark核心概述
+								Application	：基于Spark的应用程序 =  1 driver + executors
+									User program built on Spark. 
+									Consists of a driver program and executors on the cluster.
+									spark0402.py
+									pyspark/spark-shell
+
+								Driver program	
+									The process running the main() function of the application 
+									creating the SparkContext	
+
+								Cluster manager
+									An external service for acquiring resources on the cluster (e.g. standalone manager, Mesos, YARN)	
+									spark-submit --master local[2]/spark://hadoop000:7077/yarn
+
+								Deploy mode	
+									Distinguishes where the driver process runs. 
+										In "cluster" mode, the framework launches the driver inside of the cluster. 
+										In "client" mode, the submitter launches the driver outside of the cluster.	
+
+								Worker node	
+									Any node that can run application code in the cluster
+									standalone: slave节点 slaves配置文件
+									yarn: nodemanager
+
+
+								Executor	
+									A process launched for an application on a worker node
+									runs tasks 
+									keeps data in memory or disk storage across them
+									Each application has its own executors.	
+
+
+								Task	
+									A unit of work that will be sent to one executor	
+
+								Job	
+									A parallel computation consisting of multiple tasks that 
+									gets spawned in response to a Spark action (e.g. save, collect); 
+									you'll see this term used in the driver's logs.
+									一个action对应一个job
+
+								Stage	
+									Each job gets divided into smaller sets of tasks called stages 
+									that depend on each other
+									(similar to the map and reduce stages in MapReduce); 
+									you'll see this term used in the driver's logs.	
+									一个stage的边界往往是从某个地方取数据开始，到shuffle的结束
+
+
+
+
+								Spark Cache
+									rdd.cache(): StorageLevel
+
+									cache它和tranformation: lazy   没有遇到action是不会提交作业到spark上运行的
+
+									如果一个RDD在后续的计算中可能会被使用到，那么建议cache
+
+									cache底层调用的是persist方法，传入的参数是：StorageLevel.MEMORY_ONLY
+									cache=persist
+
+									unpersist: 立即执行的
+
+							2. Spark Cache
+									rdd.cache(): StorageLevel
+									cache它和tranformation: lazy   没有遇到action是不会提交作业到spark上运行的
+									如果一个RDD在后续的计算中可能会被使用到，那么建议cache
+									cache底层调用的是persist方法，传入的参数是：StorageLevel.MEMORY_ONLY
+									cache=persist
+									unpersist: 立即执行的
+
+
+									- lines.cache()
+									- lines.count()
+									http://192.168.0.107:4040/storage/  #可以看到缓存状态，缓存作用disc到作业间的中间层
+
+									！！！ 缓存一个数据集到内存里面
+
+									One of the most important capabilities in Spark is persisting (or caching) a dataset in memory across operations. When you persist an RDD, each node stores any partitions of it that it computes in memory and reuses them in other actions on that dataset (or datasets derived from it). This allows future actions to be much faster (often by more than 10x). Caching is a key tool for iterative algorithms and fast interactive use.
+
+								- 移除cache
+									>>> lines.unpersist()   #非lazy，立即执行
+
+								- StorageLevel
+									>>> from pyspark import StorageLevel
+									>>> lines.persist(StorageLevel.MEMORY_ONLY_2)
+									# Memory Serialized 2x Replicated 
+
+
+					5) spark优化
+							a) 概述
+								1. 序列化
+								2. 内存管理
+								3. 广播变量
+								4. 数据本地性
+
+							b) HistoryServer配置及使用
+								1. conf文件修改
+									[hadoop@hadoop000 conf]$ cp spark-defaults.conf.template spark-defaults.conf
+									[hadoop@hadoop000 conf]$ vim spark-defaults.conf
+										# Example:
+										# spark.master                     spark://master:7077
+										spark.eventLog.enabled           true     # 释放设置为true
+										spark.eventLog.dir               hdfs://hadoop000:8020/directory
+								2. 创建路径
+									[hadoop@hadoop000 hadoop-2.6.0-cdh5.7.0]$ hadoop fs -mkdir /directory
+
+								3. spark-env.sh 配置
+									SPARK_HISTORY_OPTS="-Dspark.history.fs.logDirectory=hdfs://hadoop000:8020/directory"
+
+								4. 启动history-server
+									[hadoop@hadoop000 sbin]$ ./start-history-server.sh 
+
+								5. webUI：
+									http://hadoop000:18080
+
+							c) 优化之序列化
+							d) 优化之内存管理
+							e) 优化之广播变量
+								>>> broadcastVar = sc.broadcast([1,2,3,4,6,7.7])
+								>>> broadcastVar.value
+								[1, 2, 3, 4, 6, 7.7]
+							f) 优化之数据本地性
+
+
+					6) Spark SQL
+						0) 概述
+								SQL:  MySQL、Oracle、DB2、SQLServer
+								很多小伙伴熟悉SQL语言
+								数据量越来越大 ==> 大数据(Hive、Spark Core)
+								直接使用SQL语句来对大数据进行分析：这是大家所追逐的梦想
+
+								person.txt ==> 存放在HDFS
+								1,zhangsan,30
+								2,lisi,31
+								3,wangwu,32
+
+								hive表：person
+									id:int   name:string  age:int
+								导入数据：
+									load .....
+								统计分析：
+									select ... from person	
+
+								SQL on Hadoop
+									Hive
+									Shark 
+									Impala: Cloudera
+									Presto
+									Drill
+									.....
+
+								Hive: on MapReduce
+									SQL ==> MapReduce ==> Hadoop Cluster
+
+								Shark: on Spark
+									基于Hive源码进行改造
+
+								Spark SQL: on Spark
+
+								Hive on Spark
+
+								共同点： metastore  mysql
+
+
+								Spark SQL不仅仅是SQL这么简单的事情，它还能做更多的事情
+									Hive: SQL
+									Spark SQL: SQL
+
+								Spark SQL提供的操作数据的方式
+									SQL
+									DataFrame API
+									Dataset API
+
+								一个用于处理结构化数据的Spark组件，强调的是“结构化数据”，而非“SQL”
+
+
+
+								Spark RDD  VS  MapReduce
+								R/Pandas :  one machine  
+									==> DataFrame：像开发单机版应用程序一样来开发分布式应用程序
+
+
+								A DataFrame is a Dataset organized into named columns
+								以列(列名、列类型、列值)的形式构成分布式的数据集
+
+								面试题：RDD与DataFrame的区别 12345
+
+							/home/hadoop/PycharmProjects/pySpark_test/spark0401.py
+
+						1) dataframeApi
+							a) 读取数据（pyspark）：
+								>>> df = spark.read.json("file:///home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.json")
+								>>> df.show()
+
+								** 注意metastore_bd是否存在，在的话删除(路径：/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/bin  ？？？)
+
+								>>> df1 = spark.read.load("file:///home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.json", format="json")
+
+								>>> df.printSchema()
+								>>> df.select("name").show()
+								>>> df.select(df['name'], df['age'] + 1000).show()
+								>>> df.filter(df['age'] > 21).show()
+								>>> df.groupBy("age").count().show()
+
+								# 临时表建立
+								>>> df.createOrReplaceTempView("people")
+								>>> sqlDF = spark.sql("SELECT * FROM people")
+								>>> sqlDF.show()
+							b) pycharm运行
+
+									from pyspark.sql import SparkSession
+
+										def basic(spark):
+										    df = spark.read.json("file:///home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.json")
+										    df.show()   
+
+										if __name__ == '__main__':
+										    spark = SparkSession.builder.appName("spark0801").getOrCreate()
+
+										    basic(spark)
+
+										    spark.stop()
+
+							c) RDD 与 DataFrame 互换
+									Spark SQL supports two different methods for converting existing RDDs into Datasets. The first method uses reflection to infer the schema of an RDD that contains specific types of objects. This reflection based approach leads to more concise code and works well when you already know the schema while writing your Spark application.
+
+									The second method for creating Datasets is through a programmatic interface that allows you to construct a schema and then apply it to an existing RDD. While this method is more verbose, it allows you to construct Datasets when the columns and their types are not known until runtime.
+									
+									a) Interoperating with RDDs
+										>>> lines = sc.textFile("file:///home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.txt")
+										>>> parts = lines.map(lambda l: l.split(","))
+										>>> people = parts.map(lambda p: Row(name=p[0], age=int(p[1])))
+										>>> schemaPeople = spark.createDataFrame(people)
+
+										>>> from pyspark import Row
+
+										>>> schemaPeople = spark.createDataFrame(people)
+										>>> schemaPeople.printSchema()
+										>>> schemaPeople.show()
+
+										>>> schemaPeople.createOrReplaceTempView("people")
+										>>> teenagers = spark.sql("SELECT name FROM people WHERE age>=13 AND AGE<19")
+
+										>>> teenagers.rdd.map(lambda p:"Name: "+p.name).collect()
+
+
+
+									b) Programmatically Specifying the Schema
+									    - Create an RDD of tuples or lists from the original RDD;
+									    - Create the schema represented by a StructType matching the structure of tuples or lists in the RDD created in the step 1.
+									    - Apply the schema to the RDD via createDataFrame method provided by SparkSession.
+
+									    code:
+
+									    lines = sc.textFile("file:///home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.txt")
+									    parts = lines.map(lambda l: l.split(","))
+									    # Each line is converted to a tuple.
+									    people = parts.map(lambda p: (p[0], p[1].strip()))
+
+									    # The schema is encoded in a string.
+									    schemaString = "name age"
+
+									    from pyspark.sql.types import *
+
+									    fields = [StructField(field_name, StringType(), True) for field_name in schemaString.split()]
+									    schema = StructType(fields)
+
+									    # Apply the schema to the RDD.
+									    schemaPeople = spark.createDataFrame(people, schema)
+
+									    # Creates a temporary view using the DataFrame
+									    schemaPeople.createOrReplaceTempView("people")
+
+									    # SQL can be run over DataFrames that have been registered as a table.
+									    results = spark.sql("SELECT name FROM people")
+
+									    results.show()
+
+
+									    转换成RDD
+
+					7) SparkStreaming
+							a) nc -lk 9996
+								import sys
+
+								from pyspark import SparkContext
+								from pyspark.streaming import StreamingContext
+
+								if __name__ == '__main__':
+
+								    if len(sys.argv) != 3:
+								        print("Usage: spark0901.py <hostname> <port>", file=sys.stderr)
+								        sys.exit(-1)
+
+								    sc = SparkContext(appName="spark0901")
+								    ssc = StreamingContext(sc, 5)
+
+								    # TODO... 根据业务需求开发我们自己的业务
+
+								    # Define the input sources by creating input DStreams.
+								    lines = ssc.socketTextStream(sys.argv[1], int(sys.argv[2]))
+
+								    # Define the streaming computations by applying transformation
+								    counts = lines.flatMap(lambda line: line.split(" ")) \
+								        .map(lambda word: (word, 1)) \
+								        .reduceByKey(lambda a, b: a + b)
+
+								    # output operations to DStreams
+								    counts.pprint()
+
+								    # Start receiving data and processing it
+								    ssc.start()
+
+								    # Wait for the processing to be stopped
+								    ssc.awaitTermination()
+
+							b) SparkStreaming操作文件系统数据实战
+									# Parameters:file:///home/hadoop/softwear/ss
+									# 将数据mv到ss包中去，hdfs同样处理
+
+									import sys
+
+									from pyspark import SparkContext
+									from pyspark.streaming import StreamingContext
+
+									if __name__ == '__main__':
+
+									    if len(sys.argv) !=2:
+									        print("Usage spark0902.py <directory>",file=sys.stderr)
+									        sys.exit(-1)
+
+									    sc = SparkContext(appName="spark0902")
+									    ssc = StreamingContext(sc,5)
+
+									    lines = ssc.textFileStream(sys.argv[1])
+									    counts = lines.flatMap(lambda line:line.split(" "))\
+									        .map(lambda word:(word,1))\
+									        .reduceByKey(lambda a,b:a+b)
+
+									    counts.pprint()
+
+									    ssc.start()
+									    ssc.awaitTermination()
+
+					8) Azkaban
+							a) 工作流在大数据处理中的重要性
+								Spark SQL/Hadoop用于做离线统计处理
+								ETL
+								1) 数据抽取： 
+									Sqoop把RDBMS中的数据抽取到Hadoop
+									Flume进行日志、文本数据的采集，采集到Hadoop
+								2) 数据处理
+									Hive/MapReduce/Spark/......
+								3) 统计结果入库
+									数据就存放到HDFS(Hive/Spark SQL/文件)
+										启动一个Server: HiveServer2 / ThriftServer
+										jdbc的方式去访问统计结果
+									使用Sqoop把结果导出到RDBMS中
+
+								这些作业之间是存在时间先后依赖关系的
+								Step A ==> Step B ==> Step C 
+
+								crontab定时调度
+								为了更好的组织起这样的复杂执行计算的关系===> 这就需要一个工作流调度系统来进行依赖关系作业的调度
+
+
+								Linux crontab + shell
+									优点：简单、易用
+									缺点：
+										维护
+										依赖
+											step a:  01:30  30分钟
+											step b:  02:10  30分钟
+											step c:  02:50  30分钟
+											.....
+											资源利用率
+											集群在0130压力非常大，资源没有申请到
+
+								常用的调度框架
+									Azkaban：轻量级
+									Oozie：重量级
+										cm hue
+										xml
+									宙斯(Zeus)
+
+							b) 概述
+									Azkaban概述
+										Open-source Workflow Manager
+										批处理工作流，用于跑Hadoop的job
+										提供了一个易于使用的用户界面来维护和跟踪你的工作流程
+
+									Azkaban架构
+										Relational Database (MySQL)
+										AzkabanWebServer
+										AzkabanExecutorServer
+
+
+									Azkaban运行模式
+										solo-server
+											数据信息存储在H2==>MySQL
+											webserver和execserver是运行在同一个进程中
+										the heavier weight two server mode
+											数据信息存储在MySQL，在生产上一定要做主备 
+											webserver和execserver是运行在不同的进程中的
+										distributed multiple-executor mode
+
+
+									Azkaban编译：万世开头难，务必要保证你的网络速度不错
+										1） 去github上下载源码包
+										2） ./gradlew build installDist
+										3） 建议搭建先去下载gradle-4.1-all.zip 然后整合到azkaban源码中来，避免在编译的过程中去网络上下载，导致编译速度非常慢
+										4） 编译成功之后，去对应的目录下找到对应模式的安装包即可
+
+
+
+									Azkaban环境搭建
+										1) 解压编译后的安装包到~/app
+										2）启动azkaban   $AZKABAN_HOME/bin/azkaban-solo-start.sh
+											验证：jps  AzkabanSingleServer
+											ip:8081
+

@@ -14,6 +14,8 @@
 	XGBoost
 	uptuna
 	bayesian opitimization
+	VSCODE
+	UBUNTU
 
 	
 
@@ -163,7 +165,8 @@ up主
 		- jupyter
 		- spyder
 		- vscode
-		- Sublime				(1)
+		● Sublime				(1)
+
 
 	云计算
 		- 阿里云
