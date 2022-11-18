@@ -406,6 +406,19 @@ windows
 					ctrl+shift+P
 						install package -> ConvertToUTF8
 						install package -> emmet
+						install package -> ColorPicker
+						install package -> SideBarEnhancements
+						install package -> A File Icon：侧边栏文件图标
+						install package -> Git
+						install package -> Terminal
+
+
+					key binding
+						Preference -> key binding -User
+							[{ "keys": ["f2"], "command": "open_in_browser" },]
+
+					运行python
+						C:\ProgramData\Anaconda3 中的 python.exe 复制一份改为 py.exe
 
 					centos7： 安装sublime -> https://blog.csdn.net/q2826621520/article/details/53782103
 
@@ -1257,7 +1270,7 @@ windows
 
 
 		
-Linux (centos7)
+[Linux] (centos7)
 	ALL
 		cd /root/workspace/ml_mooc_tf/tensorflow2.0_course/chapter_2
 		source /root/environment/tf2_py3/bin/activate
@@ -1350,6 +1363,8 @@ Linux (centos7)
 
 				grep 				查找文件内容 	[ti@mm log]$ grep conn8 mongo.log       [root@mm system]# ls |grep sshd.
 				grep -r  			目录下查找文件内的内容     [ti@mm app]$ grep -R conn8 ~/app/]
+									ls -lha ~ |grep Do  #查询文件名包含Do的文件
+
 				which				which ls
 
 			---- 文件目录管理（常用命令 2.）
@@ -1487,9 +1502,6 @@ Linux (centos7)
 					17:24:33 up 359 days,  8:24,  1 user,  load average: 0.02, 0.04, 0.05
 				---- uname 查看当前内核属性
 					uname -a
-
-
-
 
 
 			---- 权限管理-用户与用户组
@@ -1835,7 +1847,7 @@ Linux (centos7)
 						- tar -tvf imooc.tar  # 查看详细信息
 						- tar -xf imooc.tar   # 解压缩
 
-						- tar -czvf imooc.tar.gz imooc   # 压缩为gz文件
+						- tar -zcvf imooc.tar.gz imooc   # 压缩为gz文件
 						- tar -tzvf imooc.tar.gz   # 查看!!
 						- tar -xzvf imooc.tar.gz   # 解压缩
 						-
@@ -1903,9 +1915,6 @@ Linux (centos7)
 							-运行时切换
 							systemctl isolate graphical.target
 							systemctl isolate multi-user.target
-
-
-
 
 
 			---- 进程管理
@@ -1998,8 +2007,6 @@ Linux (centos7)
 					-- proc 进程的映像文件
 						- more /proc/cpuinfo
 						- more /proc/meminfo
-
-
 
 
 			---- 计划任务
@@ -2120,6 +2127,7 @@ Linux (centos7)
 						-:		时间范围
 						,:		多个时间
 						/:		每 如: */3
+
 
 			---- 系统引导流程及服务
 				---- 1. 系统引导流程
@@ -2244,6 +2252,7 @@ Linux (centos7)
 						-- dmesg |grep ***
 						系统日志（更全面）
 						-- /var/log/messages
+
 
 			---- 网络管理
 				---- 1. 基本概念
@@ -2410,8 +2419,6 @@ Linux (centos7)
 							有时需确定使用真实网卡中的（有线、还是无线网卡）
 						NAT：使用VMnet8			（缺点：只能和主机通信，不能和局域网其他机器通信）
 							HostOnly：使用VMnet1		（缺点：只能和主机通信，不能和局域网其他机器通信，切不能上外网）
-
-
 
 
 		 	12. 软件安装
@@ -2808,6 +2815,7 @@ Linux (centos7)
 		 			-- 配置文件 		>>	/etc/rsyslog.conf
 		 			-- 日志位置 		>>	/var/log/*
 		 			-- 日志分析软件 	>>	watch
+		
 		 	16. FTP服务器
 		 		---- 1. 基本概念
 		 		---- 2. FTP客户端工具（windows）
@@ -2928,7 +2936,6 @@ Linux (centos7)
 						"""
 					systemctl start tomcatd.service
 
-
 		 	17.1 Nginx
 		 		-- 安装
 		 			yum install epel-release 
@@ -2951,9 +2958,521 @@ Linux (centos7)
 					systemctl start nginx
 
 		 		-- 5. 补充
+	
 		 	17.2 PHP
 
+
+	0.1) 	others
+		0) Linux 常用命令
+			1. 软件操作
+				- 安装软件：yum install ***
+				- 卸载软件：yum remove ***
+				- 搜索软件：yum search ***
+				- 清理缓存：yum clean packages
+				- 列出已安装：yum list
+					-[ti@localhost ~]$ yum list |grep firewalld
+				- 软件包信息：yum info vim-common
+
+			2. 硬件资源信息
+				- 内存： free -m
+				- 硬盘： df -h
+				- 负载： w （最近1,5,15分钟负载）
+				- 负载： top
+				- cpu：cat /proc/cpuinfo
+
+			3. 文件目录
+				- 根目录： /
+				- 家目录： /home
+				- 临时目录： /tmp
+				- 配置目录： /etc
+				- 用户程序目录： /usr
+
+			4. 文件操作基本命令
+				- 查看目录下文件： ls
+					- ll = ls -al
+				- 新建文件： touch filename
+					- touch imooc
+					- touch imooc.log
+				- 新建文件夹： mkdir
+					- mkdir -p imooc/t1/t2/t3
+				- 删除文件和目录： rm (rm -rf filename)
+				- 复制： cp
+					- [root@localhost tmp]# cp ./imooc.log /tian
+				- 移动： mv
+					- [root@localhost tian]# mv /tian/imooc.log /tmp
+				- 显示路径： pwd
+
+			5. vim
+				- http://www.runoob.com/linux/linux-vim.html
+				- 显示行数： :set number
+				- G → 移动到这个档案的最后一行(常用)
+				- gg →  移动到这个档案的第一行，相当于 1G 啊！ (常用)
+				- /word →  	向光标之下寻找一个名称为 word 的字符串。例如要在档案内搜寻 vbird 这个字符串，就输入 /vbird 即可！ (常用)
+				- ?word →  	向光标之上寻找一个字符串名称为 word 的字符串。
+				- :n1,n2s/word1/word2/g →  	n1 与 n2 为数字。在第 n1 与 n2 行之间寻找 word1 这个字符串，并将该字符串取代为 word2 ！
+						例→  :1,60s/word/str/g    
+				- :1,$s/word1/word2/gc →  	从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2 ！且在取代前显示提示字符给用户确认 (confirm) 是否需要取代！(常用)
+
+			8. 解压缩
+
+				- tar -cf imooc.tar imooc  # 压缩
+				- tar -tf imooc.tar   # 查看
+				- tar -tvf imooc.tar  # 查看详细信息
+				- tar -xf imooc.tar   # 解压缩
+
+				- tar -czvf imooc.tar.gz imooc   # 压缩为gz文件
+				- tar -tzvf imooc.tar.gz   #查看
+				- tar -xzvf imooc.tar.gz   # 解压缩
+
+				- 解压至目标文件夹：
+					[ti@localhost soft]$ tar -zxvf jdk-8u181-linux-x64.tar.gz -C ~/app/
+
+			9. 系统用户操作
+				- 添加用户： useradd
+					- useradd ti
+				- 删除用户： userdel
+					- userdel -r ti
+				- 设置密码： passwd
+					- passwd ti (密码输入)
+
+			10. 防火墙设置
+				- 设置防火墙规则：开放80,22端口
+				- 关闭防火墙
+				- 安装： yum install firewalld  (CentOS7默认安装好的)
+				- 确认防火墙已安装好
+					[ti@localhost ~]$ yum list |grep firewalld
+				- 确认服务已启动
+					[ti@localhost ~]$ ps -ef |grep firewalld
+				- 启动： service firewalld start
+				- 检查状态 service firewalld status
+				- 关闭或禁用： service firewalld stop
+				- 关闭开机启动：systemctl disable firewalld.service
+				- systemctl is-enabled firewalld.service
+
+				- firewall-cmd
+					- 查看版本：[root@localhost ~]# firewall-cmd --version
+					- 是否在运行：[root@localhost ~]# firewall-cmd --state
+					- 查看区域：[root@localhost ~]# firewall-cmd --get-zones
+								[root@localhost ~]# firewall-cmd --list-all-zone
+					- 端口：
+						- 查看： [root@localhost ~]# firewall-cmd --query-port=22/tcp
+						- 添加： [root@localhost ~]# firewall-cmd --add-port=22/tcp
+								[root@localhost ~]# firewall-cmd --add-service=ssh
+
+			11. 提权
+				- [root@localhost home]# visudo  （root状态）
+					## Allows people in group wheel to run all commands
+					%wheel  ALL=(ALL)       ALL
+					%imooc  ALL=(ALL)       ALL
+					%ti     ALL=(ALL)       ALL
+					%mmc  ALL=(ALL)       ALL
+
+			12. 文件上传、下载
+				- wget
+					wget http://www.baidu.com
+				- curl
+					[imooc@localhost tmp]$ curl -o baidu.html  http://baidu.com
+
+				- scp
+
+			95. Anaconda
+				- 版本：Anaconda3-4.4.0-Linux-x86_64.sh
+
+				- sudo yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+
+				- vim ~/.bash_profile
+					export PATH=/home/hadoop/anaconda3/bin:$PATH
+
+					export SPARK_HOME=/home/hadoop/app/spark-2.3.0-bin-2.6.0-cdh5.7.0
+					export PATH=$SPARK_HOME/bin:$PATH
+					export PYSPARK_PYTHON=python3.6
+
+				- spark-conf配置（[hadoop@hadoop000 conf]$ vim spark-env.sh）
+					#!/usr/bin/env bash
+					export PYSPARK_PYTHON=/home/hadoop/anaconda3/bin/python3
+					SPARK_LOCAL_IP=127.0.0.1
+
+				- sudo yum -y install epel-release
+				- sudo yum -y install python-pip3
+				- pip install --upgrade pip
+
+				- pip install findspark
+
+				- spyder 设置
+					最终成的配置方法如下：1.安装好JDK SPARK并设置环境变量。
+					2.安装号spyder
+					3.启动spyder
+					在 tools ==> pythonpath manager 中加入如下2个路径
+					/opt/spark/python
+					/opt/spark/python/lib
+					将/opt/spark 替换成自己的spark实际安装目录
+					4.在SPARK_HOME/python/lib 下会有一个类似py4j-0.9-src.zip的压缩文件
+					将其解压到当前目录下（SPARK_HOME/python/lib），否则会报错 找不到py4j
+					重启spyder后就可以正常使用了。
+						unzip
+
+				- 重启
+
+				- easy_install -U pip
+				- python -m pip uninstall pip setuptools
 				
+
+			95. cat
+				- cat sales.csv |head -5
+				- cat sales.csv |tail -5
+
+
+			96. python virtualenvwrapper
+				0. 参考url 
+					https://www.cnblogs.com/hester/p/12369522.html
+				
+
+
+
+
+				5. 使用virtualenvwrapper（进阶）
+
+			97. hadoop用户操作赋权
+					sudo chown -R hadoop:hadoop /home/hadoop
+					sudo chown -R ti:ti /home/ti
+
+
+			98. Apache
+		    - 下载方法：链接+后缀 tar.gz   http://archive.cloudera.com/cdh5/cdh/5/hbase-0.98.6-cdh5.3.0.tar.gz
+			- hadoop-2.5.0
+			- hbase-0.98.6-cdh5.3.0.tar.gz
+			- zookeeper-3.4.5-cdh5.10.0.tar.gz
+
+			99. 其他常用命令
+				- 切换用户 sudo su
+				- 访问文件最后几行：[root@localhost logs]# tail -f access_log 
+
+				- wc计算功能
+					- 读取制定文本的函数： [root@localhost tian]# grep -n "76" imooc.log
+						11:76
+						22:76
+					- 计算行数： [root@localhost tian]# cat imooc.log |wc -l
+					- 计算某个文本个数： 
+						[root@localhost tian]# grep "76" imooc.log |wc -l
+						[root@localhost tian]# grep "2018-08-14" imooc.log |wc -l
+					- 显示某个文本：
+						[root@localhost tian]# grep "76" imooc.log |more
+
+
+
+
+
+				998. 赋予普通账户root权限
+					- chmod 777 /etc/sudoers
+					- 修改上述文件
+						## Allow root to run any commands anywhere 
+						root    ALL=(ALL)       ALL
+						hadoop  ALL=(ALL)       ALL
+						ti  ALL=(ALL)       ALL
+
+
+				999. 修改主机名
+					https://www.cnblogs.com/zhaojiedi1992/p/zhaojiedi_linux_043_hostname.html
+
+					1. 查看主机名：hostnamectl
+					2. 修改主机名：1	3. hosts修改：
+						- [root@localhost ~]# vim /etc/hosts
+						- 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 hadoop11
+
+						https://jingyan.baidu.com/article/0964eca24fea938284f53669.html
+						https://www.linuxidc.com/Linux/2016-10/135886.htm
+
+						1. 查看主机名：hostnamectl
+						2. 修改主机名：hostnamectl set-hostname hadoop000
+						/etc/hosts
+						192.168.0.107   hadoop000
+
+		1）安装（省略）
+
+		2）初始准备工作 start 
+			1.查看IP
+				ifconfig(开始时无法用)
+				ip addr  →ens33
+				su root
+				vi /etc/sysconfig/network-scripts/ifcfg-ens33
+					注：ONBOOT=no 改为 yes  （esc :wq)
+				
+				ip addr
+				service network restart(systemctl restart network)
+				->> centos8 nmcli c reload
+
+
+				yum install net-tools -y
+				yum install vim -y
+				yum install wget -y
+
+				→ 可以使用 ifconfig
+
+			2.替换默认源
+				http://mirrors.163.com/.help/centos.html
+				（http://mirrors.163.com/.help/CentOS7-Base-163.repo）
+
+				1.	yum install wget
+					cd /etc/yum.repos.d/
+					wget http://mirrors.163.com/.help/CentOS7-Base-163.repo
+
+				2.查看版本
+					cat /etc/redhat-release
+				3.
+					mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+					cd /etc/yum.repos.d/
+
+				4.
+					yum clean all
+					yum makecache
+				5. ls查看（163.repo）
+
+			3.安装vim
+				yum install vim
+
+		3）远程连接SHH
+
+			1. 安装SSH
+				1. 安装：yum install openssh-server
+				2. 启动：service sshd start
+				3. 设置开机运行：chkconfig sshd on
+							systemctl enable sshd.service
+			
+			2. Xshell远程登录
+				ssh root@192.168.0.101
+
+			3. 启动sshservice
+				/bin/systemctl start sshd.service
+
+			4. 查看ssh进程
+				ps -ef |grep ssh
+
+			-. ping测试ip是否对
+				ping 192.168.0.***
+				ctl+c 退出当前命令
+
+			5. SSH config （字符串代替IP地址登录）
+				1. root家目录中 touch config
+				2. config设置“imooc”登录
+					vim config
+						host "imooc"
+						    HostName 192.168.0.101
+						    User root
+						    Port 22
+				3. ssh imooc
+
+			6. SSH name登录
+				1. [root@localhost .ssh]# ssh-keygen （名称例：imooc_rsa）			回车-回车
+				2. [root@localhost .ssh]# touch authorized_keys
+				3. cat
+
+		4) WebServer安装、配置
+			1. Appache安装
+				- 安装： yum install httpd
+				- 启动： service httpd start
+				- 停止： service httpd stop
+				- 查看进程： [imooc@localhost tmp]$ ps -ef |grep httpd
+
+				- 浏览器输入ip： 192.168.0.101 （因为防火墙，无法显示网页）
+				- [imooc@localhost tmp]$ sudo netstat -anpl |grep 'http'
+
+			2. Apache的虚拟主机配置及伪静态操作
+				- hosts文件修改：192.168.0.101 www.imooc.test
+					- windows路径 ：C:\Windows\System32\drivers\etc
+							192.168.0.101  www.imooc.test
+							192.168.0.102  www.imooc.test
+							192.168.0.103  www.imooc.test
+							192.168.0.104  www.imooc.test
+							192.168.0.105  www.imooc.test
+							192.168.0.106  www.imooc.test
+							192.168.0.107  www.imooc.test
+							192.168.0.108  www.imooc.test
+							192.168.0.109  www.imooc.test
+							192.168.0.110  www.imooc.test
+					- linux路径： [imooc@localhost www]$ sudo vim /etc/hosts
+
+				- 修改httpd.conf文件
+					-[ti@localhost conf]$ sudo vim /etc/httpd/conf/httpd.conf 
+						# virtual host being defined.
+						#
+						<VirtualHost *:80>
+						        ServerName www.imooc.test
+						        DocumentRoot /data/www
+						</VirtualHost>
+				- 重启：[imooc@localhost conf]$ sudo service httpd restart
+				- 新建/data/www 
+				- 权限更改：
+					[imooc@localhost www]$ sudo chown -R imooc:imooc /data
+				- 新建测试html文件： vim index.html
+
+			3. Nginx安装
+				- 安装：
+					1. rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+
+					2. yum install nginx
+				- 启动： service nginx start
+				- 停止： service nginx stop
+				- 重载： service nginx reload
+				- 查看进程： [imooc@localhost tmp]$ ps -ef |grep nginx
+				- 开机启动： [root@hadoop000 ~]# systemctl enable nginx.service
+
+				[root@mm etc]#  /etc/init.d/nginx start
+
+
+
+				- 配置虚拟主机：
+					- [imooc@localhost conf.d]$ sudo cp default.conf  imooc.conf
+
+							server {
+							    listen       80;
+							    server_name  www.tian.test;
+							    root /data/www;
+							    index  index.html index.htm; 
+							} 
+		 
+				- 192.168.0.108浏览器页面内容设置 
+					[imooc@localhost conf.d]$ sudo vim /usr/share/ng inx/html/index.html 
+		 
+		5）mysql 
+			1. 安装 
+				1. 卸载 yum remove mariadb-libs.x86_64
+
+				2. 下载 wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+
+				3. 本地安装：yum localinstall mysql57-community-release-el7-11.noarch.rpm 
+
+				4. 安装：sudo yum install mysql-community-server
+
+		 			配置文件 		>> 	cat /etc/my.cnf
+		 			数据库主目录 		>>	/var/lib/mysql
+		 			日志文件 		>> 	/var/log/mysqld.log
+
+				5. 启动：systemctl restart mysqld (sudo service mysqld restart)
+
+				6. 获取密码：cat /var/log/mysqld.log |grep password
+					!%Wr#aj4C?d<
+
+				7. [root@localhost tmp]# mysql -uroot -p
+
+			3. use mysql
+				所以你更改密码必须满足：数字、小写字母、大写字母 、特殊字符、长度至少8位
+
+				#mysql> use mysql;
+				mysql> alter  user 'root'@'localhost' identified by '#mmc2014MMC';
+				mysql> flush privileges;	  #刷新
+
+			3. 重置密码
+				1. 免密登录
+					https://blog.csdn.net/qq_28347599/article/details/71915209
+				2. 修改密码
+				mysql> update mysql.user set authentication_string=PASSWORD('123456') where user='root';
+				
+				flush privileges;
+
+				远程root登录
+				update user set host='%' where user='root';
+				flush privileges;
+
+				或者：
+				myssqladmin -u用户名 -p旧密码 password 新密码
+
+			
+			4. 设置简单密码
+				set global validate_password_policy=0;
+				set global validate_password_length=1;
+				SET PASSWORD = PASSWORD('123456');   //123456 是重置的新密码
+				flush privileges;
+
+
+			4.1 重设密码（有效！！）
+				1.  vi /etc/my.cnf，在[mysqld]中添加
+
+				skip-grant-tables
+
+				例如：
+
+				[mysqld]
+				skip-grant-tables
+				datadir=/var/lib/mysql
+				socket=/var/lib/mysql/mysql.sock
+
+				2.  重启mysql
+
+				service mysql restart
+
+				3.  使用用户无密码登录
+
+				mysql -uroot -p (直接点击回车，密码为空)
+
+				4. 选择数据库
+
+				use mysql;
+
+				5. 修改root密码
+
+				update user set authentication_string=password('123456') where user='root';
+
+				6 .刷新权限
+
+				 flush privileges;
+
+				7 .退出
+
+				exit;
+
+				8 .删除第1部增加的配置信息
+
+				skip-grant-tables
+
+				9 .重启mysql
+
+				service mysql restart
+
+
+
+
+
+
+
+
+			5. 远程登录
+				mysql -h39.98.59.77 -uroot -p
+					Enter password:
+					ERROR 1130 (HY000): Host '39.98.59.77' is not allowed to connect to this MySQL server
+				mysql -uroot -p
+				mysql> use mysql;
+				mysql> update user set host='%' where user='root';
+				mysql> flush privileges;
+
+				firewall-cmd --zone=public --add-port=3306/tcp --permanent
+				firewall-cmd --reload
+
+
+
+
+			6. 新建用户
+				什么都没有的数据库
+				- mysql> create user 'imooc'@'%' identified by '123456';
+
+				赋予权限
+				- grant all privileges on *.* to 'imooc'@'%' identified by '123456' with grant option;
+				- [hadoop@hadoop000 ~]$ sudo chown -R hadoop:hadoop /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/logs
+
+			7. 允许root用户在任何地方进行远程登录，并具有所有库任何操作权限，
+
+				具体操作如下：
+
+				在本机先使用root用户登录mysql： mysql -u root -p"youpassword" 进行授权操作：
+
+				mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mmc_999' WITH GRANT OPTION;
+
+				重载授权表：
+
+				FLUSH PRIVILEGES;
+
+				退出mysql数据库：
+
+				exit				
 [python安装]
 	# https://www.cnblogs.com/zhanghan5/p/12100510.html
 	yum -y groupinstall "Development tools"
@@ -2975,9 +3494,6 @@ Linux (centos7)
 	pip3
 	pip3 install --upgrade pip
 
-
-
-			
 
 [PySpark(163)]
 	1. 概述：
@@ -5489,3 +6005,64 @@ Linux (centos7)
 		8. 移除软件（保留配置）
 			命令:dpkg -r package 
 			实例:dpkg -r sogoupinyin
+	【小操作】
+		终端
+			ctrl + shift + 放大终端窗口的字体显示
+			ctrl + - 缩小终端窗口的字体显示
+		echo
+			echo '123' > abc.txt    # 覆盖
+			echo '123' >> abc.txt 	# 追加
+			ls -lh > abc.txt
+
+		shutdown +10
+
+		ifconfig
+
+		SSH
+			sudo apt-get install openssh-server
+			sudo service ssh start
+		scp:
+			$ scp -r workspace ti@192.168.110.128:/home/ti/Downloads    再输入密码
+			$ scp -r C:/Download/pycharm-professional-2020.2.3.tar.gz ti@192.168.110.128:/home/ti/Downloads
+
+		find
+			find -name "*pycharm*"
+
+		软连接
+			ln -s 被链接的源文件
+
+		apt安装
+			1. 安装 sudo apt install xxxx
+			2. 卸载 sudo apt remove xxxx
+			3. 更新 sudp apt upgrade 
+
+		替换软件源
+			图形界面：
+				系统 -> Software&update -> Download from -> 选择
+
+		tar.gz安装 # https://dandelioncloud.cn/article/details/1470231847887282178/
+			例：pycharm安装
+				1. tar -zxvf pycharm-professional-2020.2.3.tar.gz -C /home/ti/my_soft/    	# 解压缩
+				2. cd /home/ti/my_soft/pycharm-2020.2.3/bin/      							# 进入bin目录
+				3. sh ./pycharm.sh 															# 安装
+			例：pycharm快捷方式
+				1.终端进入此路径：cd /usr/share/applications
+				2.执行命令：sudo touch pycharm.desktop
+				3.执行命令：sudo vim pycharm.desktop
+				4.复制下面代码到pycharm.desktop文件中，注意修改其中标记的两项的路径
+					"""
+						[Desktop Entry]
+						Version=1.0
+						Type=Application
+						Name=PyCharm
+						Icon=/home/ti/my_soft/pycharm-2020.2.3/bin/pycharm.png    #注意此处的路径
+						Exec="/home/ti/my_soft/pycharm-2020.2.3/bin/pycharm.sh" %f   #注意此处的路径
+						Comment=The Drive to Develop
+						Categories=Development;IDE;
+						Terminal=false Startup
+						WMClass=jetbrains-pycharm
+					"""
+
+
+
+
