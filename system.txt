@@ -35,6 +35,7 @@ windows
 		时间锁定：
 			https://blog.csdn.net/weixin_33834075/article/details/92540800
 			注意: 若.vmx文件中已包含tools.syncTime = “FALSE” , 只需添加后面5行, 否则会提示tools.syncTime已经定义, 不能启动.
+
 	202012 dell新电脑
 		SHLT99-476Q793
 		电脑型号：戴尔 Latitude 5411 笔记本电脑
@@ -50,9 +51,6 @@ windows
 		网卡：英特尔 Wi-Fi 6 AX201 160MHz
 		网卡：英特尔 Ethernet Connection  I219-LM / 戴尔
 		公司显示器：P2418D
-
-		
-
 
 	[cmd]
 		快捷键打开，先win+r 输入cmd,将下一步点击Enter 换为Ctrl+Shift+Enter，直接以管理员打开cmd
@@ -136,8 +134,6 @@ windows
 			=SUM(D6:H6*{1,2,3,4,5})/5
 			=D6:H6*D7:H7  #必须选中5个格子
 			# 纵向分号 =SUM(D13:D17*{1;2;3;4;5})/5
-
-
 			
 	[outlook]
 		密码修改: cmd(control)->凭据管理器->windows凭据->普通凭据->MicrosoftOffice16->编辑
@@ -156,6 +152,10 @@ windows
 			浏览器输入
 				about:config
 			pocket.enabled -> true
+
+
+	[eage]
+		read模式： url之前输入 read:  可以复制粘帖内容 或者http://read:
 	[conda] 虚拟环境
 		参考重要！：https://www.cnblogs.com/lucifer1997/p/13539896.html
 		参考url:https://blog.csdn.net/qq_41754907/article/details/121562755
@@ -619,6 +619,8 @@ windows
 						九洲大润发	104.064076	30.49484
 					自定义区域
 						geojson.io
+					移动地图
+						长按左键 + 空格  再拖拽
 				自定义图片
 					存放路径(logo文件夹是自己添加的）：C:\Program Files\Tableau\Tableau 2020.4\defaults\Shapes\Logo
 

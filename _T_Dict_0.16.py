@@ -5036,3 +5036,22 @@ show_batch()
 # torch.optim.Adam
 # 优化器推荐使用 torch.optim.Adam, lr=0.001 (学习率初始值), 学习率指数衰减: torch.optim.lr_scheduler.ExponentialLR 
 
+
+""" cifar10 kaggle """
+import torch
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+PATH = '/kaggle/input/cifar10-python/cifar-10-batches-py'
+batch_size = 256
+
+
+train_dataset = datasets.CIFAR10(root="../input/cifar10-python", train=True, download=False,transform=transforms.ToTensor())
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+
+test_dataset = datasets.CIFAR10(root="../input/cifar10-python", train=False, download=False,transform=transforms.ToTensor())
+test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+
+
+print("num_of_train", len(train_dataset))
+print("num_of_test", len(test_dataset))
