@@ -8,14 +8,8 @@
 	pycharm
 	
 	AUC
-	instant gradifi
-
-	LGB
-	XGBoost
 	uptuna
 	bayesian opitimization
-	VSCODE
-	UBUNTU
 
 	
 
@@ -24,7 +18,11 @@
 		numpy.array
 		Kfolder
 		KFold -> bobo
-
+		LGB
+		XGBoost
+		UBUNTU
+		instant gradifi
+		VSCODE
 
 
 实践

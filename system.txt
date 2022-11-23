@@ -96,6 +96,11 @@ windows
 
 			删除环境 rmvirtualenv
 
+	[vscode]
+		去除黄色波浪线(https://blog.csdn.net/tx1991427/article/details/126130333)
+			setting: 设置里面搜索 python.analysis.extraPaths
+			添加项：C:\ProgramData\Anaconda3\Lib\site-packages
+
 	[excel]
 		上下左右键移动不起作用
 			http://www.xitongcheng.com/jiaocheng/dnrj_article_68279.html
