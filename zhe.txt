@@ -4,14 +4,20 @@
 	每天 听一篇MK文章
 	每天 听半小时日语
 
-	github
-	pycharm
-	
-	AUC
-	uptuna
-	bayesian opitimization
 
-	
+	kaggle competitions 参加方法
+
+	from hyperopt import fmin, tpe, hp
+	countVectorizer, TfidfVectorizer
+	csr npz文件
+	bayes_opt 
+
+	firefox Floder整理
+	Catboost
+	kaggle competitions 提交
+
+	pycharm -> SQL
+	metrix -> check
 
 	ok!
 		vba 追加 8v->9v   
@@ -27,7 +33,7 @@
 
 实践
 	● 世界历史年表对照 		(1)
-	● 超市数据 PPT 			(1-)
+	● 超市数据 PPT 			(1)
 	- 超市数据 tableau 		(1-)
 	- 阿里云ECS MySQL		(1-)
 	- 阿里云ECS MC服务器搭建	(1-)
@@ -37,13 +43,14 @@
 历史
 	★ 中国历史_cctv			(1-)
 	★ 世界历史_cctv			(1-)
-	★ 激荡40年				(1-)e
+	★ 激荡40年				(1-)
 	- 美苏冷战
 	- 中东战争				
 	- 朝鲜战争
 	- 主要国家简史
-	★ 天启-二战				(1-  2: 10:00)
-	- 宗教 					(1-)
+	★ 天启-二战				(1-)
+	● 宗教 					(1-n)
+	● 伊拉克战争				(1-1)
 
 
 经济
@@ -53,16 +60,17 @@
 	- 华尔街_cctv
 	- 基金_cctv
 	- 经典市场营销(科特勒)	(1-)			
-	- 500强公司
+	★ 十万个品牌故事			(1-)
 
 
 科技
 	- 数学家故事汇			(1-)
-	- 天才
-	★ 宇宙之上_BBC			(1-)
+	★ 天才　　				(1-)
 	- 史上100个伟大发现 		(1-)
 	● 量子科学解密_BBC		(1-2)
+	● 宇宙之上_BBC			(1-3)
 	● 互联网_cctv			(1-10)
+	★ 人类武器竞赛史			(1-)
 
 
 人物志
@@ -79,10 +87,11 @@
 up主
 	★ 张捷财经观察			(1-n)
 	★ 所长林超				(1-n)
-	★ 晓Lin					(1-n)
-	- 温铁军					(1-)
+	★ 晓Lin					(1-n)  卡塔尔,老龄化,英国
+	- 温铁军					(1)
 	● 开讲啦					(1-n)
 	● 司马南					(1)
+	★ 不正经的历史			(1-)	英国, 法国
 
 
 音频
@@ -136,14 +145,14 @@ up主
 
 
 	前端
-		★ HTML					(1-)
-		- CSS
+		● HTML					(1-5)
+		★ CSS					(1-)
 		- JavaScript
 		- JQuery
 
 
 	数据库
-		★ MySQL
+		★ MySQL					(1-)
 		- MongoDB
 
 
@@ -171,7 +180,7 @@ up主
 	● Markdown (typora)		(1)
 	● 安装虚拟机				(1)
 	- 正则表达式
-	- MacOS					
+	★ MacOS					(1-)			
 	- linux_ubuntu		
 	- linux_centos		
 	- 思维导图 (xmind)		(1)
@@ -181,3 +190,10 @@ up主
 课余
 	- Photoshop
 	- 摄影
+	- 剪映
+
+
+topics
+	● 苏联为何而强大
+	● 美国用了20年打造了首个全球的金融利器 (温铁军)
+	● 阻碍中国成为发达国家的“拦路虎”，“瓦森纳协定”到底是什么？

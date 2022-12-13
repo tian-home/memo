@@ -125,6 +125,11 @@ print(os.path.dirname(__file__))
 os.path.abspath(__file__)
 PATH_HEAD = os.path.abspath("..")
 
+
+""" [gc] [内存] """
+import gc 
+gc.collect()
+
 """ [break], [continue] """
 for i in range(1,4):
     for letter in 'Python':     # 第一个实例
@@ -298,6 +303,18 @@ result1=o+datetime.timedelta(days=-100)
 result2=o+datetime.timedelta(seconds=-10000)
 
 
+## 计算两个时间的差
+import time
+st="2021-03-05 00:00:00"
+et="2021-03-09 23:59:59"
+
+def tm_array(day1, day2):
+    time_array1 = time.strptime(''.join(day1.split(' ')[0]), "%Y-%m-%d")
+    timestamp_day1 = int(time.mktime(time_array1))
+    time_array2 = time.strptime(''.join(day2.split(' ')[0]), "%Y-%m-%d")
+    timestamp_day2 = int(time.mktime(time_array2))
+    result = (timestamp_day2 - timestamp_day1) // 60 // 60 // 24
+    return result
 
 # 设置时间跨度 timedelta
 from datetime import timedelta
@@ -399,7 +416,7 @@ a.strip() 'gho stwwl'
 a = ' 123'
 a.strip()
 '123'
->>> a='\t\tabc'
+a='\t\tabc'
 'abc'
 a = 'sdff\r\n\t'
 a.strip('\n')
@@ -661,6 +678,16 @@ z = df.to_dict(orient="split")
 z = df.to_dict(orient="records")
 z = df.to_dict(orient="index")
 
+
+
+## 获取最大值的key
+def get_d_max(_d):
+    items = _d.items()
+    my_list = list(items)
+    my_list.sort(key=lambda x:x[1])
+    return my_list[len(my_list)-1][0]
+
+r = get_d_max(d_bak)
 
 """ [lambda] 表达式 """
 #   基本形式
@@ -1938,14 +1965,20 @@ data = pd.read_csv(path,encoding='gbk')
 data = pd.DataFrame(KNN(k=6).fit_transform(data)) 
 data.columns = ['sex','age','label']  # fancyimpute填补缺失值时会自动删除列名
 
-
 # ！！！这里使用的是fancyimpute库，安装的时候需要visual C++环境。
 
 # KNN预测的步骤是选择出其他不存在缺失值的列，同时去除掉需要预测缺失值的列存在缺失值的行，然后计算距离。
 # 如果缺失值是离散的，使用K近邻分类器，投票选出K个邻居中最多的类别进行填补；如果为连续变量，则用K近邻回归器，拿K个邻居中该变量的平均值填补。
 
 
+## fillna之前做pd.factorize处理
+def cat_factorize(df, cat_features):
+    for cat_feature in cat_features:
+        df[cat_feature] = pd.factorize(df[cat_feature], sort=True)[0]
 
+cat_factorize(df,l_cols_cat)
+
+df['deck'].fillna("miss_value", inplace=True, limit=1)
 
 ####   nan处理 
 #   https://blog.csdn.net/brucewong0516/article/details/80406564
@@ -2103,6 +2136,8 @@ df1.merge(df2)
 df1.merge(df2,left_on="lkey",right_on="rkey")
 
 df = df1.merge(df2, left_on='lkey', right_on='rkey',suffixes=('_left', '_right'))
+
+dfa=pd.merge(df0t,dft,how='left',left_index=True,right_index=True)
 
 
 https://blog.csdn.net/bin083/article/details/94978218
@@ -3443,6 +3478,7 @@ agg = pd.pivot_table(df,index=['shop','timer_1'])                               
 agg = pd.pivot_table(df,index=['shop'],values='monetary')                               # 某变量
 agg = pd.pivot_table(df,index=['shop'],values='monetary',aggfunc=np.sum,margins=True)
 agg = pd.pivot_table(df,index=['shop'],values='monetary',aggfunc=np.mean)
+agg = pd.pivot_table(df,index=['shop'],values='monetary',aggfunc=[np.mean,len])
 
 agg = pd.pivot_table(df,index=['brand'],columns=['timer_1'],values='monetary',aggfunc=np.sum,margins=True)
 
@@ -3642,10 +3678,10 @@ re.findall('a[^a-c]c', s)
 
 
 """ 4.概括字符集
-'\d'    >>>>    数字
-'\D'    >>>>    英文字母
-'\s'    >>>>    空白字符
-.       >>>>    换行符（\n）之外其他所有字符
+'\d'    >   数字
+'\D'    >   英文字母
+'\s'    >   空白字符
+.       >   换行符（\n）之外其他所有字符
 """
 s = 'abc123ik9080 -0-0-11-2-3 -4-'
 re.findall('\d', s)
@@ -4459,6 +4495,31 @@ array([[0],
 x.reshape(10, -1)
 
 
+#### 聚合运算
+X = np.arange(16).reshape(4, -1)
+# array([[ 0,  1,  2,  3],
+#        [ 4,  5,  6,  7],
+#        [ 8,  9, 10, 11],
+#        [12, 13, 14, 15]])
+
+np.sum(X)  #-> 120
+np.sum(X, axis=1)  # -> array([ 6, 22, 38, 54])
+
+## 横向计算大于n的数量
+np.sum(X>2, axis=1)  # -> array([1, 4, 4, 4])
+
+
+np.argmax(X, axis=1)  # -> array([3, 3, 3, 2], dtype=int64)
+
+np.argsort(X)
+# array([[0, 1, 2, 3],
+#        [0, 1, 2, 3],
+#        [0, 1, 2, 3],
+#        [0, 1, 2, 3]], dtype=int64)
+
+
+
+
 
 
 """ [skl.datasets] """
@@ -4476,6 +4537,97 @@ data.data[:1]
 data.filename
 # 'C:\\ProgramData\\Anaconda3\\lib\\site-packages\\sklearn\\datasets\\data\\iris.csv'
 
+
+""" [skl.feature_selection] [feature_selection] [特征工程]"""
+
+#### VarianceThreshold
+from sklearn.feature_selection import VarianceThreshold
+
+X = [[0, 2, 0, 3], [0, 1, 4, 3], [0, 1, 1, 3]]
+selector = VarianceThreshold()
+X_new = selector.fit_transform(X)
+X_new
+
+#-> array([[2, 0],
+#->        [1, 4],
+#->        [1, 1]])
+
+
+#### SelectKBest
+from sklearn.datasets import load_digits
+from sklearn.feature_selection import SelectKBest, chi2
+
+X, y = load_digits(return_X_y=True)
+X.reshape     #->(1797, 64)
+X_new = SelectKBest(chi2, k=20).fit_transform(X, y)
+X_new.shape   #->(1797, 20)
+
+
+from sklearn.feature_selection import SelectPercentile, chi2
+X_new = SelectPercentile(chi2, percentile=10).fit_transform(X, y)
+X_new.shape   #->(1797, 7)
+
+
+#### RFE
+#https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.RFE.html?highlight=rfe#sklearn.feature_selection.RFE
+from sklearn.datasets import make_friedman1
+from sklearn.feature_selection import RFE
+from sklearn.svm import SVR
+X, y = make_friedman1(n_samples=50, n_features=10, random_state=0)
+estimator = SVR(kernel="linear")
+selector = RFE(estimator, n_features_to_select=5, step=1)
+selector = selector.fit(X, y)
+selector.support_
+# array([ True,  True,  True,  True,  True, False, False, False, False,
+#        False])
+selector.ranking_
+# array([1, 1, 1, 1, 1, 6, 4, 3, 2, 5])
+
+
+## [sklearn.metrix]
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_test, y_log_predict)
+
+# array([[403,   2],
+#        [  9,  36]])
+
+from sklearn.metrics import precision_score
+precision_score(y_test, y_log_predict)
+# 0.94736842105263153
+
+from sklearn.metrics import recall_score
+recall_score(y_test, y_log_predict)
+# 0.80000000000000004
+
+# [f1]
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_test, y_predict)
+# array([[403,   2],
+#        [  9,  36]])
+
+from sklearn.metrics import precision_score
+precision_score(y_test, y_predict)
+# 0.94736842105263153
+
+from sklearn.metrics import recall_score
+recall_score(y_test, y_predict)
+# 0.80000000000000004
+
+from sklearn.metrics import f1_score
+f1_score(y_test, y_predict)
+# 0.86746987951807231
+
+
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+mean_squared_error(y_test, y_predict)
+# 24.156602134387438
+mean_absolute_error(y_test, y_predict)
+# 3.5430974409463873
+
+
+
+
 """ [tqdm, 进度条] """
 import time
 from tqdm import tqdm, trange
@@ -4492,6 +4644,127 @@ pbar = tqdm(dic)
 for i in pbar:
     pbar.set_description('Processing '+i)
     time.sleep(0.2)
+
+""" [sns] [seaborn] """
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings('ignore')
+
+#### 数据加载
+# https://github.com/mwaskom/seaborn-data
+tips = sns.load_dataset('tips')
+
+
+
+
+#### 样式设定
+sns.set_style('darkgrid')  # [white, dark, whitegrid, darkgrid, ticks]
+sns.lineplot(data=tips, x=tips['size'], y=tips['total_bill'])
+
+# 中文显示
+sns.set_style('dark', rc={'font.family':'Simhei'})   # 设置中文显示
+sns.lineplot(data=tips, x=tips['size'], y=tips['total_bill']).set_title('小费金额_by就餐人数')
+
+sns.set_style('dark') 
+plt.rcParams['font.family'] = 'Simhei'  ## 推荐写法
+sns.lineplot(data=tips, x=tips['size'], y=tips['total_bill']).set_title('小费金额_by就餐人数')
+
+## rcParams 设置
+sns.set_style('dark') 
+plt.rcParams['font.family'] = 'Simhei'  ## 推荐写法
+# plt.rcParams['axes.facecolor'] = '#FF00FF'
+# plt.rcParams['figure.figsize'] = (10, 6)
+# plt.rcParams['axes.grid'] = True
+# plt.rcParams['grid.color'] = '#00FF00'
+sns.lineplot(data=tips, x=tips['size'], y=tips['total_bill']).set_title('小费金额_by就餐人数')
+sns.lineplot(data=tips, x=tips['size'], y=tips['total_bill'], hue='sex').set_title('小费金额_by就餐人数')
+
+#### 使用画板
+sns.palplot(sns.color_palette(palette='Blues', n_colors=20))
+sns.palplot(sns.color_palette(palette='rainbow', n_colors=20))
+sns.palplot(sns.color_palette(palette='set1', n_colors=20))
+sns.palplot(sns.color_palette(palette='set2', n_colors=20))
+"""
+Accent, Accent_r, Blues, Blues_r, BrBG, BrBG_r, BuGn, BuGn_r, BuPu, BuPu_r, CMRmap, CMRmap_r, Dark2, Dark2_r, GnBu, GnBu_r, Greens, Greens_r, Greys, Greys_r, OrRd, OrRd_r, Oranges, Oranges_r, PRGn, PRGn_r, Paired, Paired_r, Pastel1, Pastel1_r, Pastel2, Pastel2_r, PiYG, PiYG_r, PuBu, PuBuGn, PuBuGn_r, PuBu_r, PuOr, PuOr_r, PuRd, PuRd_r, Purples, Purples_r, RdBu, RdBu_r, RdGy, RdGy_r, RdPu, RdPu_r, RdYlBu, RdYlBu_r, RdYlGn, RdYlGn_r, Reds, Reds_r, Set1, Set1_r, Set2, Set2_r, Set3, Set3_r, Spectral, Spectral_r, Wistia, Wistia_r, YlGn, YlGnBu, YlGnBu_r, YlGn_r, YlOrBr, YlOrBr_r, YlOrRd, YlOrRd_r, afmhot, afmhot_r, autumn, autumn_r, binary, binary_r, bone, bone_r, brg, brg_r, bwr, bwr_r, cividis, cividis_r, cool, cool_r, coolwarm, coolwarm_r, copper, copper_r, cubehelix, cubehelix_r, flag, flag_r, gist_earth, gist_earth_r, gist_gray, gist_gray_r, gist_heat, gist_heat_r, gist_ncar, gist_ncar_r, gist_rainbow, gist_rainbow_r, gist_stern, gist_stern_r, gist_yarg, gist_yarg_r, gnuplot, gnuplot2, gnuplot2_r, gnuplot_r, gray, gray_r, hot, hot_r, hsv, hsv_r, icefire, icefire_r, inferno, inferno_r, jet, jet_r, magma, magma_r, mako, mako_r, nipy_spectral, nipy_spectral_r, ocean, ocean_r, pink, pink_r, plasma, plasma_r, prism, prism_r, rainbow, rainbow_r, rocket, rocket_r, seismic, seismic_r, spring, spring_r, summer, summer_r, tab10, tab10_r, tab20, tab20_r, tab20b, tab20b_r, tab20c, tab20c_r, terrain, terrain_r, twilight, twilight_r, twilight_shifted, twilight_shifted_r, viridis, viridis_r, vlag, vlag_r, winter, winter_r
+"""
+
+
+#### lineplot
+may_flights = flights.query("month == 'May'")
+sns.lineplot(data=may_flights, x="year", y="passengers")
+
+sns.lineplot(data=tips, x=tips.index, y='total_bill')
+sns.lineplot(data=tips, x=tips['size'], y=tips['total_bill'])
+
+
+#### barplot
+sns.barplot(data=tips, x='day', y='total_bill')
+sns.barplot(data=tips, x='day', y='total_bill', hue='sex', estimator=np.sum)
+
+sns.barplot(data=tips, x='day', y='total_bill', hue='sex', estimator=np.mean, palette='rainbow')
+
+
+#### boxplot
+sns.boxplot(data=tips)
+##  箱型 + 蜂群
+sns.boxplot(data=tips)
+sns.stripplot(data=tips)
+
+
+
+#### Catplot
+sns.catplot(data=tips, x='size', y='total_bill', hue='sex')
+sns.catplot(data=tips, x='size', y='total_bill', hue='sex', col='day')
+sns.catplot(data=tips, x='size', y='tip', hue='smoker', col='day', row='time')
+
+
+
+#### 散点图 [scatter]
+mpg = sns.load_dataset('mpg')
+sns.scatterplot(data=mpg, x='mpg', y='horsepower', hue='origin')
+sns.scatterplot(data=mpg, x='mpg', y='horsepower', hue='origin', size='cylinders')
+# 保存图片
+plt.savefig('mpg.png', dpi=200)
+
+
+
+#### 散点矩阵 [scatter]
+iris = sns.load_dataset('iris')
+sns.pairplot(data=iris)
+sns.pairplot(data=iris, hue='species')
+sns.pairplot(data=iris, hue='species', kind='kde')
+sns.pairplot(iris, hue="species", palette="Set2", diag_kind="kde", height=2.5)
+
+
+#### 直方图 histplot
+penguins = sns.load_dataset("penguins")
+sns.histplot(data=penguins, x="flipper_length_mm")
+sns.histplot(data=penguins, y="flipper_length_mm")    # 横向
+sns.histplot(data=penguins, x="flipper_length_mm", binwidth=3)
+sns.histplot(data=penguins, x="flipper_length_mm", kde=True)
+sns.histplot(data=penguins, x="flipper_length_mm", hue="species", multiple="stack", shrink=0.9)
+sns.histplot(data=penguins, x="flipper_length_mm", hue="species", multiple="dodge")
+
+
+#### 计数 countplot
+df = sns.load_dataset("titanic")
+sns.countplot(x=df["class"])
+sns.countplot(data=df, x="class", hue="alive")
+
+
+
+""" [数据预处理] [数据检查] """
+train.isnull().sum()
+train['card_id'].nunique() == train.shape[0]
+train.describe(include='all')
+
+merchants.info()
+merchants.nunique() #查看水平数量
+merchants[category_cols].dtypes
+
+merchants[_s] = merchants[_s].replace(np.inf, merchants[_s].max(), inplace=True)
 
 
 
@@ -4731,6 +5004,372 @@ ctb_grid = GridSearchCV(ctb, param_grid=params, scoring='accuracy',  cv=skf, ver
 ctb_grid.fit(X, y, eval_set=(X, y))
 # ctb_grid_search.grid_scores_,  ctb_grid_search.best_params_,  ctb_grid_search.best_score_
 ctb_grid.best_score_, ctb_grid.best_estimator_.get_params()
+
+
+
+# 通用参数：https://blog.csdn.net/weixin_42305672/article/details/111252715
+
+# 默认参数:
+params = {
+'iterations': 1000,
+'learning_rate':0.03,
+'l2_leaf_reg':3,
+'bagging_temperature':1,
+'subsample':0.66,
+'random_strength':1,
+'depth':6,
+'rsm':1,
+'one_hot_max_size':2
+'leaf_estimation_method':'Gradient',
+'fold_len_multiplier':2,
+'border_count':128,
+}
+
+
+# loss_function 损失函数，支持的有RMSE, Logloss, MAE, CrossEntropy, Quantile, LogLinQuantile, Multiclass, MultiClassOneVsAll, MAPE,Poisson。默认RMSE。
+# custom_metric 训练过程中输出的度量值。这些功能未经优化，仅出于信息目的显示。默认None。
+# eval_metric 用于过拟合检验（设置True）和最佳模型选择（设置True）的loss function，用于优化。
+# iterations 最大树数。默认1000。
+# learning_rate 学习率。默认0.03。
+# random_seed 训练时候的随机种子
+# l2_leaf_reg L2正则参数。默认3
+# bootstrap_type 定义权重计算逻辑，可选参数：Poisson (supported for GPU only)/Bayesian/Bernoulli/No，默认为Bayesian
+# bagging_temperature 贝叶斯套袋控制强度，区间[0, 1]。默认1。
+# subsample 设置样本率，当bootstrap_type为Poisson或Bernoulli时使用，默认66
+# sampling_frequency设置创建树时的采样频率，可选值PerTree/PerTreeLevel，默认为PerTreeLevel
+# random_strength 分数标准差乘数。默认1。
+# use_best_model 设置此参数时，需要提供测试数据，树的个数通过训练参数和优化loss function获得。默认False。
+# best_model_min_trees 最佳模型应该具有的树的最小数目。
+# depth 树深，最大16，建议在1到10之间。默认6。
+# ignored_features 忽略数据集中的某些特征。默认None。
+# one_hot_max_size 如果feature包含的不同值的数目超过了指定值，将feature转化为float。默认False
+# has_time 在将categorical features转化为numerical
+# features和选择树结构时，顺序选择输入数据。默认False（随机）
+# rsm 随机子空间（Random subspace method）。默认1。
+# nan_mode处理输入数据中缺失值的方法，包括Forbidden(禁止存在缺失)，Min(用最小值补)，Max(用最大值补)。默认Min。
+# fold_permutation_block_size数据集中的对象在随机排列之前按块分组。此参数定义块的大小。值越小，训练越慢。较大的值可能导致质量下降。
+# leaf_estimation_method 计算叶子值的方法，Newton/ Gradient。默认Gradient。
+# leaf_estimation_iterations 计算叶子值时梯度步数。
+# leaf_estimation_backtracking 在梯度下降期间要使用的回溯类型。
+# fold_len_multiplier folds长度系数。设置大于1的参数，在参数较小时获得最佳结果。默认2。
+# approx_on_full_history 计算近似值，False：使用1／fold_len_multiplier计算；True：使用fold中前面所有行计算。默认False。
+# class_weights 类别的权重。默认None。
+# scale_pos_weight 二进制分类中class 1的权重。该值用作class 1中对象权重的乘数。
+# boosting_type 增压方案
+# allow_const_label 使用它为所有对象训练具有相同标签值的数据集的模型。默认为False
+
+
+
+
+
+
+
+#### [CatBoostClassifier分类]
+import warnings
+warnings.filterwarnings('ignore')
+import seaborn as sns
+from catboost import CatBoostClassifier, Pool, cv
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+
+iris = sns.load_dataset('iris')
+X, y = iris.drop(['species'], axis=1), iris['species']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=True)
+X_train.shape, X_test.shape, y_train.shape, y_test.shape
+
+####
+cat_features = None
+train_pool = Pool(X_train, y_train, cat_features=cat_features)
+test_pool = Pool(X_test, y_test, cat_features=cat_features)
+
+
+model = CatBoostClassifier(
+    iterations=1000, 
+    verbose=False, 
+    loss_function='MultiClass', 
+    task_type="CPU",
+    # learning_rate=0.03,
+    # l2_leaf_reg=3,
+    use_best_model=True,
+    )
+model.fit(train_pool, eval_set=test_pool, cat_features=cat_features)
+model.best_score_
+model.score(X_test, y_test)
+y_pred = model.predict(X_test)
+model.feature_importances_
+
+#####
+cv_dataset = Pool(data=X, label=y, cat_features=cat_features)
+params = {"iterations": 100,
+            "depth": 2,
+            # "loss_function": "Logloss",
+            "loss_function": "MultiClass",
+            "verbose": False}
+
+scores = cv(cv_dataset, params, fold_count=3, plot="True")
+
+
+x_predict_proba_array = model.predict_proba(X)
+np.argmax(x_predict_proba_array, axis=1)
+
+model.save_model('cl_iris.model')
+
+model_01 = CatBoostClassifier().load_model('cl_iris.model')
+
+model_01.predict(X)
+
+
+#### [CatBoostRegressor回归]
+tips = sns.load_dataset('tips')
+X, y = tips.drop(['tip'], axis=1), tips['tip']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=True)
+X_train.shape, X_test.shape, y_train.shape, y_test.shape
+
+cat_features = ['sex', 'smoker', 'day', 'time']
+train_pool = Pool(X_train, y_train, cat_features=cat_features)
+test_pool = Pool(X_test, y_test, cat_features=cat_features)
+
+model = CatBoostRegressor(iterations=1000, 
+                          depth=2, 
+                          verbose=False, 
+                        #   learning_rate=1, 
+                          loss_function='RMSE')
+model.fit(train_pool, eval_set=test_pool)
+model.best_score_
+
+
+y_pred = model.predict(X_test)
+sqrt(np.sum((y_pred - np.array(y_test))**2)/len(y_test))
+
+#### CV
+cv_dataset = Pool(data=X, label=y, cat_features=cat_features)
+params = {"iterations": 1000,
+            # "depth": 2,
+            # "loss_function": "Logloss",
+            "loss_function": "RMSE",
+            "verbose": False}
+
+scores = cv(cv_dataset, params, fold_count=3, plot=0)
+
+# Training on fold [0/3]
+
+# bestTest = 1.237640852
+# bestIteration = 289
+
+# Training on fold [1/3]
+
+# bestTest = 0.9308206789
+# bestIteration = 250
+
+# Training on fold [2/3]
+
+# bestTest = 1.002904486
+# bestIteration = 459
+
+
+""" [lightgbm回归1] """
+import seaborn as sns
+sns.set_style('darkgrid')
+sns.set(font='IPAexGothic')
+import warnings
+warnings.filterwarnings('ignore')
+from sklearn.datasets import fetch_california_housing
+import pandas as pd
+import os
+import torch
+import numpy as np
+import random
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedGroupKFold
+import lightgbm
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+
+california_housing = fetch_california_housing(as_frame=True)
+
+X_data = pd.DataFrame(california_housing['data'], columns=california_housing.feature_names)
+Y_data = pd.Series(california_housing['target'])
+print(X_data.shape, Y_data.shape)
+X_data.head(2)
+
+# const
+seed = 123
+random_state = 123
+n_splits=5
+test_size=0.2
+
+# Train_test_split
+
+X_train, X_test, Y_train, Y_test= train_test_split(X_data, Y_data, test_size=test_size, random_state=random_state)
+X_train.shape, X_test.shape, Y_train.shape, Y_test.shape
+
+# Train params
+
+params = {
+  'random_state': random_state,
+  'objective': 'regression',
+  'boosting_type': 'gbdt',
+  'metric': {'rmse'},
+  'verbosity': -1,
+  'bagging_freq': 1,
+  'feature_fraction': 0.8,
+  'max_depth': 8,
+  'min_data_in_leaf': 25,
+  'num_leaves': 256,
+  'learning_rate': 0.07,
+  'lambda_l1': 0.2,
+  'lambda_l2': 0.5,
+}
+
+model_list = []
+
+# KFlod
+kf = KFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+
+for _index, (_train_index, _val_index) in enumerate(kf.split(X_train, Y_train)):
+    print(_index, (len(_train_index),len(_val_index)))
+    
+    _X_train = X_train.iloc[_train_index]
+    _Y_train = Y_train.iloc[_train_index]
+    
+    _X_val = X_train.iloc[_val_index]
+    _Y_val = Y_train.iloc[_val_index]
+    
+    lgb_train = lightgbm.Dataset(_X_train, _Y_train)
+    lgb_val = lightgbm.Dataset(_X_val, _Y_val, reference=lgb_train)
+    
+    lgb_results = {}
+    
+    model = lightgbm.train(
+        params,
+        train_set=lgb_train,
+        valid_sets=[lgb_train, lgb_val],
+        verbose_eval=-1,
+        num_boost_round=10000,
+        early_stopping_rounds=100,
+        valid_names=['Train', 'Val'],
+        evals_result=lgb_results,
+    )
+    
+    # 保存各个CV模型
+    model_list.append(model)
+
+_test_score_array = np.zeros(len(X_test))   
+for model in model_list:    
+    y_pred = model.predict(X_test, num_iteration=model.best_iteration)
+    _test_score_array += y_pred / n_splits
+    
+sqrt(mean_squared_error(_test_score_array, Y_test))
+
+
+""" [lightgbm回归2] """
+import seaborn as sns
+import warnings
+warnings.filterwarnings('ignore')
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
+import lightgbm
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+import numpy as np
+
+# 导入数据
+tips = sns.load_dataset('tips')
+
+# categorical_feature = ['sex', 'smoker', 'day', 'time']
+cols = ['sex', 'smoker', 'day', 'time']
+def categorize(X, cols):
+    """
+    输入: X pd数据
+           cols 需要变换的列
+    输出: 变换好的X
+    """
+    for col in cols:
+        X[col] = X[col].astype("category")  
+    return X
+categorize(tips, cols)
+
+X, y = tips.drop(['tip'], axis=1), tips['tip']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=42, shuffle=1)
+
+
+params = {
+    'metric' : 'rmse'
+    }
+
+model_list = []
+
+kf = KFold(n_splits=3, shuffle=True, random_state=0)
+for _index, (_train_index, _val_index) in enumerate(kf.split(X_train, y_train)):
+    print(_index, (len(_train_index), len(_val_index)))
+    
+    # 抽取 train val 数据
+    _X_train = X_train.iloc[_train_index]
+    _y_train = y_train.iloc[_train_index]
+    _X_val = X_train.iloc[_val_index]
+    _y_val = y_train.iloc[_val_index]
+    
+    # 格式化数据 lightgbm Dataset
+    lgb_train = lightgbm.Dataset(_X_train, _y_train, )
+    lgb_val = lightgbm.Dataset(_X_val, _y_val, reference=lgb_train)
+    
+    lgb_results = {}
+    
+    # 训练模型
+    model = lightgbm.train(
+        params,
+        train_set=lgb_train,
+        valid_sets=[lgb_train, lgb_val],
+        verbose_eval=-1,
+        num_boost_round=10000,
+        early_stopping_rounds=100,
+        valid_names=['Train', 'Val'],
+        evals_result=lgb_results,
+        )
+    
+    # 保存K折模型
+    model_list.append(model) 
+    
+    
+    # 損失関数の推移
+    loss_train = lgb_results['Train']['rmse']
+    loss_val = lgb_results['Val']['rmse']
+
+    # plt.figure()
+    # plt.xlabel('Iteration')
+    # plt.ylabel('rmse')
+    # plt.plot(loss_train, label='train loss')
+    # plt.plot(loss_val, label='valid loss')
+    # plt.title('kFold : {} \n RMSE'.format(_index))
+    # plt.legend()
+    # plt.show()
+    
+    # # # 散点图
+    # plt.figure(figsize=(4,4))
+    # y_val = model.predict(_X_val, num_iteration=model.best_iteration)
+    # plt.plot(y_val, y_val, color = 'red', label = '$y=x$')
+    # plt.scatter(y_val,_y_val, s=1)
+    # plt.xlabel('予測値')
+    # plt.ylabel('真値')
+    # plt.title('kFold : {} \n 予測値 vs 真値'.format(_index))
+    # plt.legend()
+    # plt.show()
+
+l_rmse = []
+for model in model_list:
+    y_pred = model.predict(X_test)
+    
+    l_rmse.append(sqrt(mean_squared_error(y_test, y_pred)))
+np.mean(np.array(l_rmse))
+
+
+
+
+
 
 
 """ [DL-Basic-boston] """
