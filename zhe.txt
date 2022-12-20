@@ -1,11 +1,6 @@
-
-
-田蕴川
+chuan
 	每天 听一篇MK文章
 	每天 听半小时日语
-
-
-	kaggle competitions 参加方法
 
 	from hyperopt import fmin, tpe, hp
 	countVectorizer, TfidfVectorizer
@@ -13,22 +8,16 @@
 	bayes_opt 
 
 	firefox Floder整理
-	Catboost
-	kaggle competitions 提交
 
 	pycharm -> SQL
-	metrix -> check
+	特征工程
 
 	ok!
 		vba 追加 8v->9v   
-		numpy.array
-		Kfolder
-		KFold -> bobo
-		LGB
-		XGBoost
-		UBUNTU
-		instant gradifi
-		VSCODE
+
+
+For 
+	python, html, python, mysql, jianyin
 
 
 实践
@@ -48,7 +37,7 @@
 	- 中东战争				
 	- 朝鲜战争
 	- 主要国家简史
-	★ 天启-二战				(1-)
+	● 天启-二战				(1-)
 	● 宗教 					(1-n)
 	● 伊拉克战争				(1-1)
 
@@ -64,13 +53,12 @@
 
 
 科技
-	- 数学家故事汇			(1-)
-	★ 天才　　				(1-)
+	- 10位数学家故事汇		(1-)
 	- 史上100个伟大发现 		(1-)
+	★ 人类武器竞赛史			(1-)
 	● 量子科学解密_BBC		(1-2)
 	● 宇宙之上_BBC			(1-3)
 	● 互联网_cctv			(1-10)
-	★ 人类武器竞赛史			(1-)
 
 
 人物志
@@ -81,6 +69,7 @@
 	- 爱因斯坦
 	- 诺贝尔
 	- 居里夫人
+	- 本拉登
 
 
 
@@ -92,6 +81,9 @@ up主
 	● 开讲啦					(1-n)
 	● 司马南					(1)
 	★ 不正经的历史			(1-)	英国, 法国
+	★ 逸语道破				(1-)	
+	★ 一水					(1-)
+	★ 大象放映室				(1-)
 
 
 音频
@@ -191,9 +183,28 @@ up主
 	- Photoshop
 	- 摄影
 	- 剪映
+	- 视觉笔记
 
 
 topics
 	● 苏联为何而强大
 	● 美国用了20年打造了首个全球的金融利器 (温铁军)
 	● 阻碍中国成为发达国家的“拦路虎”，“瓦森纳协定”到底是什么？
+	● 美苏冷战大事记（上）
+
+
+
+chuan
+	ok!
+		vba 追加 8v->9v   
+		kaggle competitions 参加方法
+		metrix -> check
+		Catboost
+		numpy.array
+		Kfolder
+		KFold -> bobo
+		LGB
+		XGBoost
+		UBUNTU
+		instant gradifi
+		VSCODE

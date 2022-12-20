@@ -234,6 +234,81 @@ t1=datetime.datetime.strptime(df_0.投票时间[0],'%Y-%m-%d %H:%M:%S')
 t2=datetime.datetime.strptime(df_0.投票时间[1],'%Y-%m-%d %H:%M:%S')
 t1-t2
 
+
+#### pandas.to_datetime
+pd.to_datetime('2022/09')
+pd.to_datetime('2022-09-01')
+pd.to_datetime('2022/09/01')
+# Timestamp('2022-09-01 00:00:00')
+
+pd.to_datetime('aaa', errors='ignore')
+# 'aaa'
+
+pd.to_datetime('5#1#2019', format='%d#%m#%Y')
+# Timestamp('2019-01-05 00:00:00')
+
+t = 1551966534
+pd.to_datetime(t, unit='s')
+# Timestamp('2019-03-07 13:48:54')
+
+
+from datetime import datetime 
+df = pd.DataFrame([datetime.now(), datetime.now()], columns=['t1'])
+#     t1
+# 0   2022-12-18 17:14:57.939921
+# 1   2022-12-18 17:14:57.939921
+
+df['t1'].values.astype('datetime64[D]')
+# array(['2022-12-18', '2022-12-18'], dtype='datetime64[D]')
+
+df['t1'].values.astype('datetime64[ns]')
+# array(['2022-12-18T17:14:57.939921000', '2022-12-18T17:14:57.939921000'], dtype='datetime64[ns]')
+df['t1'].values.astype('datetime64[ms]')
+
+df['t1'].values.astype('datetime64[s]')
+# array(['2022-12-18T17:14:57', '2022-12-18T17:14:57'],  dtype='datetime64[s]')
+
+df['t1'].values.astype('datetime64[M]')
+# array(['2022-12', '2022-12'], dtype='datetime64[M]')
+
+df['t1'].values.astype('datetime64[Y]')
+# array(['2022', '2022'], dtype='datetime64[Y]')
+
+type(df['t1'].values)
+# numpy.ndarray
+
+[s.year for s in df['t1']]
+# s.year, s.month, s.day, s.hour, s.minute, s.second
+df['t1'].dt.year
+df['t1'].dt.month
+# .... dt.quarter, dt.weekofyear, dt.datofweek, dt.weekday
+
+
+#### pd.Timestamp转化
+pd.Timestamp('2012-09-12')
+
+new_m['t1'] = new_m['purchase_date'].values.astype('datetime64[s]')
+new_m['t_now'] = datetime.datetime.now()
+new_m['t_now'] - new_m['t1']
+
+# 0         1743 days 18:46:11.377368
+# 1         1735 days 14:50:10.377368
+# 2         1697 days 19:35:03.377368
+# ......
+
+
+(new_m['t_now'] - new_m['t1']).dt.days
+# 0          1743
+# 1          1735
+# 2          1697
+# 3          1748
+# 4          1732        
+
+
+pd.Timestamp(datetime.datetime.now())
+# Timestamp('2022-12-19 11:34:00.631534')
+
+
 #时间计算1 不推荐
 start = time.clock()
 df['人均']=df.人均.str.strip('￥')    
@@ -928,7 +1003,7 @@ print("%10.*f" % (4, 1.2))
 '{0} is {1}'.format('jihite', '4 years old')
 '{0} is {1} {0}'.format('jihite', '4 years old')
 
-## astype  改变类型
+## [astype]  改变类型
 df1['price'] = df['price'].astype(str)
 df1['price'] = df['price'].astype('int')
 
@@ -4517,9 +4592,42 @@ np.argsort(X)
 #        [0, 1, 2, 3],
 #        [0, 1, 2, 3]], dtype=int64)
 
+""" [skl.impute] titanic"""
+#### 均值填充
+age=data['Age'].values.reshape(-1,1)  #取出缺失值所在列的数值，sklearn当中特征矩阵必须是二维才能传入 使用reshape(-1,1)升维
 
+from sklearn.impute import SimpleImputer #导入模块
+imp_mean=SimpleImputer(missing_values=np.nan,strategy='mean')  #实例化，均值填充
+imp_mean=imp_mean.fit_transform(age)     #fit_transform一步完成调取结果
+data['Age']=imp_mean       #填充好的数据传回到 data['Age']列
+data['Age'].isnull().sum() #检验是否还有空值，为0即说明空值均已被填充
 
+#### 中值填充
+age=data['Age'].values.reshape(-1,1)         #取出缺失值所在列的数值，sklearn当中特征矩阵必须是二维才能传入 使用reshape(-1,1)升维
 
+from sklearn.impute import SimpleImputer     #导入模块
+imp_median=SimpleImputer(missing_values=np.nan,strategy='median')    #实例化，中值填充
+imp_median=imp_median.fit_transform(age)     #fit_transform一步完成调取结果
+data['Age']=imp_median       #填充好的数据传回到 data['Age']列
+data['Age'].isnull().sum()   #检验是否还有空值，为0即说明空值均已被填充
+
+#### 众数填充
+age=data['Age'].values.reshape(-1,1)  #取出缺失值所在列的数值，sklearn当中特征矩阵必须是二维才能传入 使用reshape(-1,1)升维
+
+from sklearn.impute import SimpleImputer #导入模块
+imp_most_frequent=SimpleImputer(missing_values=np.nan,strategy='most_frequent')  #实例化，众数填充
+imp_most_frequent=imp_most_frequent.fit_transform(age)     #fit_transform一步完成调取结果
+data['Age']=imp_most_frequent       #填充好的数据传回到 data['Age']列
+data['Age'].isnull().sum()          #检验是否还有空值，为0即说明空值均已被填充
+
+#### 常数填充
+age=data['Age'].values.reshape(-1,1)  #取出缺失值所在列的数值，sklearn当中特征矩阵必须是二维才能传入 使用reshape(-1,1)升维
+
+from sklearn.impute import SimpleImputer       #导入模块
+imp_0=SimpleImputer(missing_values=np.nan,strategy='constant',fill_value=0)  #实例化，填充常数0，填充常数需strategy与fill_value一同使用
+imp_0=imp_0.fit_transform(age)     #fit_transform一步完成调取结果
+data['Age']=imp_0                   #填充好的数据传回到 data['Age']列
+data['Age'].isnull().sum()          #检验是否还有空值，为0即说明空值均已被填充
 
 
 """ [skl.datasets] """
@@ -4626,6 +4734,26 @@ mean_absolute_error(y_test, y_predict)
 # 3.5430974409463873
 
 
+
+#### KBins
+from sklearn.preprocessing import KBinsDiscretizer
+import numpy as np
+# X = [[-2, 1, -4,   -1],
+#   [-1, 2, -3, -0.5],
+#   [ 0, 3, -2,  0.5],
+#   [ 1, 4, -1,    2]]
+
+# X = np.arange(16).reshape(2,-1)
+X = np.random.randint(0,6, size=(6,4))
+
+# est = KBinsDiscretizer(n_bins=3, encode='ordinal', strategy='uniform')
+# est = KBinsDiscretizer(n_bins=4, encode='ordinal', strategy='quantile')
+est = KBinsDiscretizer(n_bins=4, encode='ordinal', strategy='kmeans')
+
+# strategy{‘uniform’, ‘quantile’, ‘kmeans’}, default=’quantile’
+est.fit(X)
+Xt = est.transform(X)
+Xt
 
 
 """ [tqdm, 进度条] """
